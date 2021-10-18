@@ -10,7 +10,7 @@ Currently, Journey supports the following features:
 - Open-ended learning progression
 
 ## Getting Started
-To get started creating a learning journey, check out our [tutorial](docs/tutorial.md)!
+To get started creating a learning journey, check out [tutorial](docs/tutorial.md)!
 
 ## Contributing
 
