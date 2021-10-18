@@ -1,0 +1,2541 @@
+#!csharp
+
+#r "nuget: Interactive.Journey"
+#r "nuget: Interactive.Extension.ImageSharp"
+
+#!csharp
+
+using Microsoft.DotNet.Interactive.Journey;
+using Microsoft.DotNet.Interactive;
+using Microsoft.DotNet.Interactive.Commands;
+using Microsoft.DotNet.Interactive.CSharp;
+using Microsoft.DotNet.Interactive.Events;
+using SixLabors.ImageSharp;
+using System.IO;
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Count Even and Odd numbers
+
+#!csharp
+
+Func<int[],IEnumerable<int>> EvenOdd = str => new int[2];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for number of vowels and consonents", context =>
+{
+    var correctAns = new int[]{5,4};
+    var inputArray = new int[]{1,2,6,1,3,11,90,13,18};
+    var ans = EvenOdd(inputArray);
+
+    if (correctAns.All(ans.Contains) && correctAns.Count() == ans.Count())
+    {
+        context.Pass("Correct count of Even and odd ");
+    }
+    else
+    {
+        context.Fail("Incorrect count of Even and Odd", 
+        "Use If-else statements");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 1 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 1 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 1: Count of Even and Odd numbers in the array
+
+#!markdown
+
+In this challenge, you will be writing a solution ot find the counts of even and odd numbers present in the array.
+
+An even number is one which is divisible properly by 2, and odd numbers are which which are not.
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `EvenOdd`. The lambda should have type `Func<int[] , int[]>`.
+
+It should output an array of length 2, containing total odd counts and even counts.
+
+Eg 1.
+
+      arr: [1,2,3,4,5,7,11,13]
+        
+      output: [6,2]
+
+Eg 2.
+
+      arr: [10,12,33]
+        
+      output: [1,2]
+
+#!csharp
+
+EvenOdd = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+EvenOdd = inputArray => 
+{   
+    var even = 0;
+    var odd = 0; 
+    foreach( var c in inputArray){
+        if(c % 2 == 0)
+        even++;
+        else odd++;
+    }
+    return new int[]{odd, even};
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Most frequent element(Unsorted array)
+
+#!csharp
+
+Func<int[],int> MaxFreq = inputArray => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Maximum frequency element", context =>
+{
+    var correctAns = 1;
+    var inputArray = new int[]{3,2,1,6,2,2,4,2,19,1,3,1,1,9,1,2};
+    var ans = MaxFreq(inputArray);
+
+    if (correctAns == ans)
+    {
+        context.Pass("Correct Maximum frequency element");
+    }
+    else
+    {
+        context.Fail("Incorrect Maximum frequency element", 
+        "Think of using HashMap");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 2 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 2 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 2: Maximum frequency element in an unsorted array
+
+#!markdown
+
+In this challenge, you will be writing a solution to find the maximum frequency element in an unsorted array.
+
+A maximum frequency element is one, which is present the maximum number of times in the array, if two maximum frequency elements are present, you should return the mathematically smaller one.
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `MaxFreq`. The lambda should have type `Func<int[] , int>`.
+
+It should output the maximum frequency element.
+
+      Eg 1.
+
+            arr: [4,1,3,8,4,1,1,8,2,8,10]
+            
+            output: 1
+            Explanation: 1 and 8 are present 3 number of times, but 1 is mathematically smaller.
+
+      Eg 2.
+
+            arr: [3,1,7,3]
+            
+            output: 3
+
+#!csharp
+
+MaxFreq = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MaxFreq = inputArray => 
+{   
+    Dictionary<int, int> dict = new Dictionary<int, int>();
+    foreach(int x in inputArray){
+        if(dict.ContainsKey(x)){
+            int freq = dict[x];
+            freq++;
+            dict[x] = freq;
+        }
+        else dict[x] = 1;
+    }
+    int maxi = 1;
+    int maxElement = inputArray[0];
+    foreach(var pair in dict){
+        if(pair.Value > maxi){
+            maxElement = pair.Key;
+            maxi = pair.Value;
+        }
+        else if(pair.Value == maxi){
+            maxElement = maxElement < pair.Key? maxElement:pair.Key;
+        }
+    }
+    return maxElement;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Maximum frequency element ( Sorted array)
+
+#!csharp
+
+Func<int[],int> MaxFreqSorted = inputArray => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Maximum frequency element", context =>
+{
+    var correctAns = 7;
+    var inputArray = new int[]{1,1,1,1,3,4,4,5,6,6,6,6,6,7,7,7,7,7,7};
+    var ans = MaxFreqSorted(inputArray);
+
+    if (correctAns == ans)
+    {
+        context.Pass("Correct Maximum frequency element");
+    }
+    else
+    {
+        context.Fail("Incorrect Maximum frequency element", 
+        "Since the array is sorted, keep iterating and increase the count till you find a number that is different than the previous element, check for the maximum frequency element, and reinitialise the counter to zero.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 3 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 3 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 3: Maximum frequency element in a sorted array
+
+#!markdown
+
+In this challenge, you will be writing a solution to find the maximum frequency element in an Sorted array.
+
+A maximum frequency element is one, which is present the maximum number of times in the array, if two maximum frequency elements are present, you should return the mathematically smaller one.
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `MaxFreqSorted`. The lambda should have type `Func<int[] , int>`.
+
+It should output the maximum frequency element.
+
+      Eg 1.
+
+            arr: [1,1,1,1,1,3,3,3,5,5,5,5,5,10]
+            
+            output: 1
+            Explanation: 1 and 5 are present 5 number of times, but 1 is mathematically smaller.
+
+      Eg 2.
+
+            arr: [10,10,20]
+            
+            output: 10
+
+#!csharp
+
+MaxFreqSorted = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MaxFreqSorted = inputArray => 
+{   
+    int maxElement = inputArray[0];
+    int globalMax = 1;
+    int currentMax = 1;
+    for(int i = 1; i < inputArray.Length;i++){
+        if(inputArray[i] == inputArray[i-1]){
+            currentMax++;
+        }
+        else {
+            if(currentMax > globalMax){
+                globalMax = currentMax;
+                maxElement = inputArray[i-1];
+            }
+            currentMax = 1;
+        }
+    }
+    if(currentMax > globalMax){
+        maxElement = inputArray[inputArray.Length-1];
+    }
+    return maxElement;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Reverse the array
+
+#!csharp
+
+Func<int[],int[]> ReverseArray = inputArray => new int[inputArray.Length];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Reversing  the array", context =>
+{
+    var correctAns = new int[]{8,7,6,5,4,3,2,1};
+    var inputArray = new int[]{1,2,3,4,5,6,7,8};
+    var ans = ReverseArray(inputArray);
+
+    if (correctAns.Length == ans.Length && ans.SequenceEqual(correctAns))
+    {
+        context.Pass("Correct Reversed array");
+    }
+    else
+    {
+        context.Fail("Incorrect Reversed array", 
+        "Use two pointers, one at the beginning and one at the end of the array, keep swapping till you reach the mid of the array");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 4 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 4 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 4: Reverse the array (in Place)
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to reverse the array in Place.
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `ReverseArray`. The lambda should have type `Func<int[] , int[]>`.
+
+It should output the reversed array.
+
+      Eg 1.
+
+            arr: [1,2,3,4,5]
+            
+            output: [5,4,3,2,1]
+
+      Eg 2.
+
+            arr: [8,1,4,2,13,11]
+            
+            output: [11,13,2,4,1,8]
+
+#!csharp
+
+ReverseArray = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+ReverseArray = inputArray => 
+{   
+    int low = 0;
+    int high = inputArray.Length-1;
+    while(low <= high){
+        int temp = inputArray[low];
+        inputArray[low] = inputArray[high];
+        inputArray[high] = temp;
+        low++; 
+        high--; 
+    }
+    return inputArray;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Rotate the array
+
+#!csharp
+
+Func<int[],int,int[]> RotateArray = (inputArray,k) => new int[inputArray.Length];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Rotating  the array", context =>
+{
+    var correctAns = new int[]{5,6,7,8,9,1,2,3,4};
+    var inputArray = new int[]{1,2,3,4,5,6,7,8,9};
+    var k = 4;
+    var ans = RotateArray(inputArray,k);
+
+    if (correctAns.Length == ans.Length && ans.SequenceEqual(correctAns))
+    {
+        context.Pass("Correct Rotated array");
+    }
+    else
+    {
+        context.Fail("Incorrect Rotated array", 
+        "Reversing (Partial/Full) might be helpful!!, think about it!!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 5 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 5 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 5: Rotate the array (in Place)
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to left rotate the array in place.
+
+A k times left rotated array is the one whose every ith element is at (i-k)th index, and all the indexes where (i-k) < 0 are wrapped back to the end.
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `RotateArray`. The lambda should have type `Func<int[] ,int,  int[]>`.
+
+It should output the rotated array.
+
+      Eg 1.
+
+            arr: [1,2,3,4,5]
+            k : 2
+            output: [3,4,5,1,2]
+            Explanation: 
+                  First rotate: [2,3,4,5,1]
+                  Second rotate: [3,4,5,1,2]
+
+      Eg 2.
+
+            arr: [11,2,5,1]
+            k : 3
+            output: [1,11,2,5]
+            Explanation: 
+                  First rotate: [2,5,1,11]
+                  Second rotate: [5,1,11,2]
+                  Third rotate: [1,11,2,5]
+
+#!csharp
+
+RotateArray = (inputArray,k) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+int[] reverse(int[] inputArray, int x, int y)
+{   
+    int low = x;
+    int high = y;
+    while(low <= high){
+        int temp = inputArray[low];
+        inputArray[low] = inputArray[high];
+        inputArray[high] = temp;
+        low++; 
+        high--; 
+    }
+    return inputArray;
+}
+
+RotateArray = (inputArray,k) => 
+{   
+    reverse(inputArray,0,inputArray.Length-1);
+    reverse(inputArray,0,inputArray.Length - k -1);
+    reverse(inputArray,inputArray.Length-k,inputArray.Length-1);
+    return inputArray;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Sorted Squared Array
+
+#!csharp
+
+Func<int[],int[]> SortedSquared = inputArray => new int[inputArray.Length];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Sorted Squared array", context =>
+{
+    var correctAns = new int[]{0,1,9,9,16,25,64,81,121};
+    var inputArray = new int[]{-9,-3,-1,0,3,4,5,8,11};
+    var ans = SortedSquared(inputArray);
+
+    if (correctAns.Length == ans.Length && ans.SequenceEqual(correctAns))
+    {
+        context.Pass("Correct Sorted Squared array");
+    }
+    else
+    {
+        context.Fail("Incorrect Sorted Squared array", 
+        "Use two pointers to keep track of the smallest and the largest values in the input array. Compare the absolute value of these smallest and largest values, square the larger absolute value, and place the square at the end of the output array, filling it up from right to left. Move the pointers accordingly,and repeat this process until the output array is filled.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 6 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 6 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 6: Sorted Squared array
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to left rotate the array in place.
+
+Given an integer array nums sorted in non-decreasing order, return an array of the squares of each number sorted in non-decreasing order.
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `SortedSquared`. The lambda should have type `Func<int[] , int[]>`.
+
+It should output the sorted squared array.
+
+      Eg 1.
+
+            Input: nums = [-4,-1,0,3,10]
+            Output: [0,1,9,16,100]
+            Explanation: After squaring, the array becomes [16,1,0,9,100].
+            After sorting, it becomes [0,1,9,16,100].
+
+      Eg 2.
+
+            Input: nums = [-7,-3,2,3,11]
+            Output: [4,9,9,49,121]  
+
+#!csharp
+
+SortedSquared = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+SortedSquared = array=> 
+{   
+    int[] sortedSquares = new int[array.Length];
+    int smallerValueIdx = 0;
+    int largerValueIdx = array.Length - 1;
+    for(int idx = array.Length-1;idx>=0;idx--){
+        int smallerValue = array[smallerValueIdx];
+        int largerValue = array[largerValueIdx];
+        if(Math.Abs(smallerValue) > Math.Abs(largerValue)){
+            sortedSquares[idx] = smallerValue*smallerValue;
+            smallerValueIdx++;
+        }
+        else {
+            sortedSquares[idx] = largerValue*largerValue;
+            largerValueIdx--;
+        }
+    }
+    return sortedSquares;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Move Element to the end
+
+#!csharp
+
+Func<int[],int,int[]> MoveElementToEnd = (inputArray,toMove) => new int[inputArray.Length];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Move element to the end", context =>
+{
+    var correctAns = new List<int[]>{new int[]{3,1,4,2,2,2,2,2},new int[]{4,3,1,2,2,2,2,2},new int[]{1,3,4,2,2,2,2,2},new int[]{1,4,3,2,2,2,2,2},new int[]{3,4,1,2,2,2,2,2},new int[]{4,1,3,2,2,2,2,2}};
+    var inputArray = new int[]{2,1,2,2,2,3,4,2};
+    var toMove = 2;
+    var ans = MoveElementToEnd(inputArray,toMove);
+    bool flag = false;
+    for(int i = 0; i<correctAns.Count;i++){
+        if(correctAns[i].Length == ans.Length && ans.SequenceEqual(correctAns[i])){
+            flag = true;
+            break;
+        }
+    }
+    if (flag)
+    {
+        context.Pass("Correctly moved element to the end");
+    }
+    else
+    {
+        context.Fail("Incorrectly moved element to the end", 
+        "Set two pointers at the start and the end of the array respectively. Move the right pointer inwards so long as it points to the integer to move, and move the left pointer inwards so long as it doesn't point to the integer to move. When both pointers aren't moving, swap their values in place. Repeat this process until the pointers pass each other.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 7 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 7 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 7: Move element to the end of the array
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to move all the occurences of the given element to the end of the array in place.
+
+You're given an array of integers and an integer. you have to move all instances of that integer in the array to the end of the array and return the array.
+
+
+
+The type you will be working with is `int[]` and `int`. It represents the array that is given to you and the element that has to be moved to the end.
+
+Your will write your answer as a lambda and assign it to `MoveElementToEnd`. The lambda should have type `Func<int[] , int ,int[]>`.
+
+It should output the array with all the occurences of the given element moved to the end.
+
+      Eg:
+
+            Input:
+            array = [2, 1, 2, 2, 2, 3, 4, 2]
+            toMove = 2
+
+            Output: [1, 3, 4, 2, 2, 2, 2, 2] 
+            Note: the numbers 1, 3, and 4 could be ordered differently   
+
+#!csharp
+
+MoveElementToEnd = (inputArray,toMove) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+void swap(int i,int j,int[] array){
+    int temp = array[j];
+    array[j] = array[i];
+    array[i] = temp;
+}
+
+MoveElementToEnd = (array,toMove)=> 
+{   
+    int i = 0; 
+    int j = array.Length - 1;
+    while(i < j){
+        while(i<j && array[j] == toMove) j--;
+        if(array[i] == toMove)swap(i,j,array);
+        i++;
+    }
+    return array;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Array of products
+
+#!csharp
+
+Func<int[],int[]> ArrayOfProducts = array => new int[array.Length];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Array of Products", context =>
+{
+    var correctAns = new int[]{8,40,10,20};
+    var inputArray = new int[]{5,1,4,2};
+    var ans = ArrayOfProducts(inputArray);
+    if (correctAns.Length == ans.Length && correctAns.SequenceEqual(ans))
+    {
+        context.Pass("Correct Array of products");
+    }
+    else
+    {
+        context.Fail("Incorrect Array of products", 
+        "For each index in the array, try calculating the product of every element to the left and the product of every element to the right. You can do this with two loops through the array: One from left to right and one from right to left. How can these products help us??");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 8 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 8 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 8: Array of products
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find the array of products.
+
+Each element in the output array is equal to the product of every other number in the input array.
+
+In other words, the value at output [i] is equal to the product of every number in the input array other than input[i] .
+Note: `You're expected to solve this problem without using the division(/) operator`.
+
+
+The type you will be working with is `int[]`. It represents the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `ArrayOfProducts`. The lambda should have type `Func<int[] ,int[]>`.
+
+It should output the array of products.
+
+      Eg:
+
+        Input:
+        array = [5, 1, 4, 2]
+        
+        Output: [8, 40, 10, 20]
+        Explanation: 
+          8 is equal to 1 x 4 x 2
+          40 is equal to 5 x 4 x 2
+          10 is equal to 5 x 1 x 2
+          20 is equal to 5 x 1 x 4
+
+#!csharp
+
+ArrayOfProducts = array =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+ArrayOfProducts = array => 
+{   
+   int[] products = new int[array.Length];
+   int leftRunningProduct = 1;
+   for(int i=0; i<array.Length; i++){
+       products[i] = leftRunningProduct;
+       leftRunningProduct*=array[i];
+   }
+   int rightRunningProduct = 1;
+   for(int i=array.Length-1;i>=0;i--){
+       products[i] *= rightRunningProduct;
+       rightRunningProduct*=array[i];
+   }
+   return products;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Two Number Sum
+
+#!csharp
+
+Func<int[],int,IEnumerable<int>> TwoSum = (inputArray,targetSum) => new int[2];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Two Sum", context =>
+{
+    var correctAns = new int[]{-1,11};
+    var array = new int[]{3,5,-4,8,11,1,-1,6};
+    var targetSum = 10;
+    var ans = TwoSum(array,targetSum);
+
+    if (ans.Count() == correctAns.Count() && ans.All(correctAns.Contains))
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Wrong answer", 
+        "Think of using Hashtables!!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 9 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 9 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 9: Two number Sum
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find the two number sum.
+
+If any two numbers in the input array sum up to the target sum,you should return them in an array, in any order. If no two numbers sum up to the target sum, you should return an empty array.
+
+Note: `The target sum has to be obtained by summing two different integers in the array; you can't add a single integer to itself in order to obtain the target sum`.
+You can assume that there will be at most one pair of numbers summing up to the target sum.
+
+
+The type you will be working with is `int[]` and `int`. It represents the array that is given to you and the target sum.
+
+Your will write your answer as a lambda and assign it to `TwoSum`. The lambda should have type `Func<int[] ,int, int[]>`.
+
+It should output the pair containing two elements whose sum is equal to target sum.
+
+      Eg:
+
+        Input:
+        array = [3, 5, -4, 8, 11, 1, -1, 6]
+        targetSum = 10
+
+        Sample Output: [-1, 11] 
+        Note: The numbers could be in reverse order
+
+#!csharp
+
+TwoSum = (array,targetSum) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+TwoSum = (array,targetSum) => 
+{   
+	List<int> answer = new List<int>();
+	Dictionary < int, int > hashmap = new Dictionary < int, int > ();
+	
+	foreach(int x in array){
+		int reqSum = targetSum-x;
+		if(hashmap.ContainsKey(reqSum))
+			return new int[]{x,reqSum};
+		hashmap[x]=1;
+	}
+		return new int[2];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] 3 Sum
+
+#!csharp
+
+Func<int[],int,List<int[]>> ThreeSum = (inputArray,targetSum) => new List<int[]>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Three Sum", context =>
+{
+    var correctAns = new List<int[]>(){new int[]{-8,3,5},new int[]{-8,2,6},new int[]{-6,1,5}};
+    var array = new int[]{12,3,1,2,-6,5,-8,6};
+    var targetSum = 0;
+    var ans = ThreeSum(array,targetSum);
+    bool flag = true;
+    foreach(int[] arr in ans){
+        if(!correctAns.Any(a => a.SequenceEqual(arr)))
+        {
+            flag = false;
+        }
+    }
+    if (flag)
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Wrong answer",      
+        "Try sorting and traversing it once.At each number,place a left pointer on the number immediately to the right of your current number and a right pointer on the final number in the array. Check if the current Number, the left number, and the right number sum up to the target sum. Remember and keep in mind, that the array is sorted!!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 10 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 10 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 10: Three Sum
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find the Three number sum.
+
+Your algorithm should find all triplets in the array that sum up to the target sum and return a two-dimensional array of all these triplets. The numbers in each triplet should be ordered in ascending order,and the triplets themselves should be ordered in ascending order with respect to the numbers they hold.
+
+If no three numbers sum up to the target sum, you should return an empty array.
+
+
+The type you will be working with is `int[]` and `int`. It represents the array that is given to you and the target sum.
+
+Your will write your answer as a lambda and assign it to `ThreeSum`. The lambda should have type `Func<int[] ,int, int[]>`.
+
+It should output all the triplets having sum equal to the target sum.
+
+      Eg:
+
+        Input:
+        array = [12, 3, 1, 2, -6, 5, -8, 6]
+        targetSum = 0
+
+        Output:
+        [[-8, 2, 6], [-8, 3, 5], [-6, 1, 5]]
+
+#!csharp
+
+ThreeSum = (array,targetSum) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+ThreeSum = (array,targetSum) => 
+{   
+	Array.Sort(array);
+	List<int[]> triplets = new List<int[]>();
+	for(int i = 0; i <array.Length - 2;i++){
+		int left = i+1;
+		int right = array.Length - 1;
+		while(left < right){
+			int currentSum = array[i]+array[left]+array[right];
+			if(currentSum == targetSum){
+				int[] newTriplet = {array[i], array[left], array[right]};
+				triplets.Add(newTriplet);
+				left++;
+				right--;
+			} else if(currentSum < targetSum){
+				left++;
+			}
+			else if(currentSum > targetSum){
+				right--;
+			}
+		}
+	}
+	return triplets;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Four Sum
+
+#!csharp
+
+Func<int[],int,List<int[]>> FourSum = (inputArray,targetSum) => new List<int[]>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Four Sum", context =>
+{
+    var correctAns = new List<int[]>(){new int[]{7,6,4,-1}, new int[]{7,6,1,2}};
+    var array = new int[]{7,6,4,-1,1,2};
+    var targetSum = 16;
+    var ans = FourSum(array,targetSum);
+    bool flag = true;
+    foreach(int[] arr in ans){
+        if(!correctAns.Any(a => a.SequenceEqual(arr)))
+        {
+            flag = false;
+        }
+    }
+    if (flag)
+    {
+        context.Pass("Correct Answer, Jumping to the String section");
+    }
+    else
+    {
+        context.Fail("Wrong answer",      
+        "Two kinds of solutions are possible, either you can extend the approach of Three sum question, or what we can do is: Calculate the sums of pair of numbers in the array. Then assuming that you've stored all of these sums in a hashtable, you can fairly easily find which two sums can be paired to add up to the target sum: the numbers summing up to these two sums constitute for valid quadruplets; you just have to make sure that no number was used to generate both of the two sums.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 11 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 11 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 11: Four Sum
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find the Four number sum.
+
+Your algorithm should find all quadruplets in the array that sum up to the target sum and return a two-dimensional array of all these quadruplets in no particular order.
+
+If no four numbers sum up to the target sum, the function should return an empty array.
+
+
+The type you will be working with is `int[]` and `int`. It represents the array that is given to you and the target sum.
+
+Your will write your answer as a lambda and assign it to `FourSum`. The lambda should have type `Func<int[] ,int, int[]>`.
+
+It should output all the quadruplets having sum equal to the target sum.
+
+      Eg:
+
+        Input:
+        array = [7, 6, 4, -1, 1, 2]
+        targetSum = 16
+
+        Output:
+        [[7, 6, 4, -1], [7, 6, 1, 2]] 
+        Note:`The quadruplets could be ordered differently`
+
+#!csharp
+
+FourSum = (array,targetSum) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+FourSum = (array,targetSum) => 
+{   
+	Dictionary<int,List<int[]>> allPairSums = new Dictionary<int,List<int[]>>();
+	List<int[]> quadruplets = new List<int[]>();
+	for(int i=1;i<array.Length-1;i++){
+		for(int j = i+1;j<array.Length;j++){
+			int currentSum = array[i]+array[j];
+			int difference = targetSum - currentSum;
+			if(allPairSums.ContainsKey(difference)){
+				foreach(int[] pair in allPairSums[difference]){
+					int[] newQuadruplet = {pair[0], pair[1],array[i],array[j]};
+					quadruplets.Add(newQuadruplet);
+				}
+			}
+		}
+		for(int k = 0;k<i;k++){
+			int currentSum = array[k] + array[i];
+			int[] pair = {array[k], array[i]};
+			if(!allPairSums.ContainsKey(currentSum)){
+				List<int[]> pairGroup = new List<int[]>();
+				pairGroup.Add(pair);
+				allPairSums.Add(currentSum,pairGroup);
+			}
+			else allPairSums[currentSum].Add(pair);
+		}
+	}
+	return quadruplets;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Counting vowels and consonants
+
+#!csharp
+
+Func<string,IEnumerable<int>> CountVowelsNConsonants = str => new int[2];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for number of vowels and consonents", context =>
+{
+    var correctAns = new int[]{3,6};
+    var str = "Microsoft";
+    var ans = CountVowelsNConsonants(str);
+
+    if (correctAns.All(ans.Contains) && correctAns.Count() == ans.Count())
+    {
+        context.Pass("Correct count of vowels and consonents");
+    }
+    else
+    {
+        context.Fail("Incorrect count of vowels and consonents", 
+        "Use If-else statements");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 12 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 12 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 12:  Count the total number of Vowels and Consonants present in the string
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to count the number of vowels and consonants present in the string.
+
+The type you will be working with is `string`. It represents the string that is given to you.
+
+Your will write your answer as a lambda and assign it to `CountVowelsNConsonants`. The lambda should have type `Func<string, IEnumerable<int>>`.
+
+It should output a pair containing the count of vowels and consonants.
+
+      Eg. 1:
+          inputString = "aabbcced"
+          output = [3,5]
+      
+      Eg. 2:
+          inputString = "athena"
+          output = [3,3]
+
+#!csharp
+
+CountVowelsNConsonants = str =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+CountVowelsNConsonants = str => 
+{   
+    var vowels = 0;
+    var consonants = 0; 
+    foreach( var c in str){
+        if(c == 'a' || c == 'e' || c == 'i' || c == 'o' ||  c == 'u' || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U')
+        vowels++;
+        else consonants++;
+    }
+    return new int[]{vowels, consonants};
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Palindrome
+
+#!csharp
+
+Func<string,bool> CheckIfPalindrome = str => false;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Palindrome", context =>
+{
+    var correctAns = true;
+    var str = "naman";
+    var ans = CheckIfPalindrome(str);
+
+    if (ans == correctAns)
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Wrong answer", 
+        "Try using two pointers to solve this problem: one at the beginning of the string and other at the end. What can you do from here?");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 13 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 13 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 13: Check of the given string is Palindrome
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find if the given string is palindrome.
+
+A palindrome is a word, phrase, or sequence that reads the same backwards as forwards, e.g. madam.
+
+The type you will be working with is `string`. It represents the string that is given to you.
+
+Your will write your answer as a lambda and assign it to `CheckIfPalindrome`. The lambda should have type `Func<string, bool>`.
+
+It should output a boolean representing whether the string is palindrome or not.
+
+      Eg. 1:
+          inputString = "athena"
+          output = false
+      
+      Eg. 2:
+          inputString = "naman"
+          output = true
+
+#!csharp
+
+CheckIfPalindrome = str =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+CheckIfPalindrome = str => 
+{   
+    int i = 0, j = str.Count()-1;
+	while(i<=j){
+		if(str[i++]!=str[j--])return false;
+	}
+	return true;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Caesar Cipher Encryptor
+
+#!csharp
+
+Func<string,int,string> CaesorCipher = (str,key) => "";
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Caesar Cipher", context =>
+{
+    var correctAns = "zylbcipjkyycbhpvlvplzpvujpjvywplvcplvywplyvplquplvwthw";
+    var str = "kjwmntauvjjnmsagwgawkagfuaugjhawgnawgjhawjgawbfawghesh";
+    var key = 15;
+    var ans = CaesorCipher(str,key);
+
+    if (ans == correctAns)
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Wrong answer", 
+        "How do you handle cases where a letter gets shifted to a position that requires wrapping around the alphabet? What about the case when the key is very large and causes multiple wrappings around the alphabet? The MODULO operator should be your friend here.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 14 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 14 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 14: Caesar Cipher Encryption
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to perform the Caesar cipher encryption.
+
+Given a non-empty string of lowercase letters and a non-negative integer representing a key, you have to write an algorithm that returns a new string obtained by shifting every letter in the input string by k positions in the alphabet, where k is the key.
+Note : `Letters should "wrap" around the alphabet; in other words, the letter z shifted by one returns the letter a`
+
+The type you will be working with is `string` and `int`. It represents the string that is given to you and the caesar key.
+
+Your will write your answer as a lambda and assign it to `CaesorCipher`. The lambda should have type `Func<string, bool>`.
+
+It should output the caesar cypher encrypted string.
+
+      Eg. 1:
+         Input:
+         string = "xyz"
+         key = 2
+
+         Output: "zab"
+      
+      Eg. 2:
+          Input:
+          string = "xyz"
+          key = 5
+
+          Output: "cde"
+
+#!csharp
+
+CaesorCipher = (str,key) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+CaesorCipher = (str,key) => 
+{   
+    StringBuilder output = new StringBuilder();
+    int newKey = key%26;
+    for(int i = 0;i<str.Count();i++){
+        int newLetterCode = str[i] + key;
+        char c = (char)(newLetterCode<=122? newLetterCode:96+newLetterCode%122);
+        output.Append(c);
+    }
+    return output.ToString();
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+#  [Challenge] Longest Palindromic Substring
+
+#!csharp
+
+Func<string,string> LPS = str => "";
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Longest Palindromic Substring", context =>
+{
+    var correctAns = "xyzzyx";
+    var str = "abaxyzzyxf";
+    var ans = LPS(str);
+
+    if (ans == correctAns)
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Wrong answer", 
+        "Recognize that a palindrome is a string that is symmetrical with respect to its center, which can either be a character(in the case of odd-length palindromes) or an empty string(in the case of even-length palindromes). Thus, you can check the palindromicity of a string by simply expanding from its center and making sure that characters on both sides are indeed mirrored.Traverse the input string, and at each index, apply the logic mentioned.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 15 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 15 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 15: Longest Palindromic Substring
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find the longest palindromic substring.
+
+Given a string s, you should write an algorithm to print the longest palindromic substring in s.
+Note: `A substring is a contiguous sequence of characters within a string.`
+
+The type you will be working with is `string`. It represents the string that is given to you.
+
+Your will write your answer as a lambda and assign it to `LPS`. The lambda should have type `Func<string, string>`.
+
+It should output the Longest palindromic substring.
+
+      Eg. 1:
+         Input: s = "cbbd"
+         Output: "bb"
+      Eg. 2:
+          Input: s = "aedbcbxyz"
+          Output: "bcb"
+
+#!csharp
+
+LPS = str =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+int GetPalidromeLength(string s, int left, int right)
+{        
+    while(left >=0 && right < s.Length && s[left] == s[right])
+    {
+        left--;
+        right++;
+    }
+    
+    return right - left - 1;
+}
+
+LPS = str => 
+{   
+    if(str == null || str.Length == 0)
+            return "";
+        
+    int length = 0, start = 0;
+    
+    for(int i = 0; i < str.Length; i++)
+    {
+        int oddLength = GetPalidromeLength(str, i, i);
+        int evenLength = GetPalidromeLength(str, i , i + 1);
+        int currLength = Math.Max(oddLength, evenLength);
+    
+        if(currLength > length)
+        {
+            length = currLength;
+            start = i - (length - 1) / 2;
+        }
+    }
+    
+        return str.Substring(start, length);       
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Minimum Characters for words
+
+#!csharp
+
+Func<string[],char[]> MinCharForWords = words => new char[10];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Minimum characters for words", context =>
+{
+    var correctAns = new char[]{'t','t','h','i','s','a','d','d','e','e','m','!'};
+    var words = new string[]{"this","that","did","deed","them!","a"};
+    var ans = MinCharForWords(words);
+
+    if (ans.Length == correctAns.Length && ans.All(correctAns.Contains)) 
+    {
+        context.Pass("Correct Minimum characters");
+    }
+    else
+    {
+        context.Fail("Incorrect Minimum characters", 
+        "Use a hash table to keep track of the maximum frequencies of all unique characters that occur across all words. Count the frequency of each character in each word, and use those per-word frequencies to update your maximum-character-frequency hash table. Once you've determined the maximum frequency of each character across all words, you can use the built-up hash table to generate your output array.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 16 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 16 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 16: Minimum Characters for words
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to find the Minimum characters for words.
+
+You have to write an algorithm that takes in an array of words and returns the smallest array of characters needed to form all of the words. The characters don't need to be in any particular order.
+For example, the characters `["y", "r", "o", "u" ]` are needed to form the words `["your", "you", "or", "yo"]`.
+
+Note: `The input words won't contain any spaces; however, they might contain punctuation and/or special characters`.
+
+The type you will be working with is `string[]`. It represents the string that is given to you.
+
+Your will write your answer as a lambda and assign it to `MinCharForWords`. The lambda should have type `Func<string[], char[]>`.
+
+It should output the Minimum characters for the given words.
+
+      Eg. 1:
+
+         Input:
+            words = ["this", "that", "did", "deed", "them!", "a"]
+         Output: ["t", "t", "h", "i", "s", "a", "d", "d", "e", "e", "m", "!"]
+           Note: The characters could be ordered differently.
+
+#!csharp
+
+MinCharForWords = words =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MinCharForWords = words =>
+{   
+    Dictionary<char,int> globalHash = new Dictionary<char,int>();
+	
+	foreach(string s in words){
+		Dictionary<char,int> localHash = new Dictionary<char,int>();
+		foreach(char c in  s){
+            if(localHash.ContainsKey(c)){
+                int freq = localHash[c];
+                freq++;
+                localHash[c] = freq;
+            }
+            else localHash[c] = 1;  
+        }
+		
+// 		comparision between local and global hash
+		foreach(var pair in localHash){
+            char key = pair.Key;
+			if(!globalHash.ContainsKey(key))globalHash[key] = localHash[key];
+			else{
+				if(globalHash[key] >= localHash[key])continue;
+				globalHash[key] = localHash[key];
+			}
+		}
+	}
+	List<char> result = new List<char>();
+	foreach(var it in globalHash){
+		for(int i = 0;i<it.Value;i++){
+			result.Add(it.Key);
+		}
+	}
+	return result.ToArray();      
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Anagrams
+
+#!csharp
+
+Func<string,string,bool> ValidAnagram = (str1,str2) => false;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Anagrams", context =>
+{
+    var correctAns = true;
+    var str1 = "anagram";
+    var str2 = "nagaram";
+    var ans = ValidAnagram(str1,str2);
+
+    if (ans == correctAns) 
+    {
+        context.Pass("Correct answer");
+    }
+    else
+    {
+        context.Fail("Incorrect answer", 
+        "The idea is to use a hash table to record the times of appearances of each letter in the two strings. For each letter in first string, counter decreses by 1. Think, how can you leverage this information at the end!!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 17 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 17 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 17: Check if two strings are Anagrams of each other
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to check if the two strings are anagrams of each other or not.
+
+You have to write an algorithm to check whether two given strings are anagram of each other or not. 
+`An anagram of a string is another string that contains the same characters, only the order of characters can be different`. 
+For example, “abcd” and “dabc” are an anagram of each other.
+
+The type you will be working with is/are `string`. It represents both the strings that are given to you.
+
+Your will write your answer as a lambda and assign it to `ValidAnagram`. The lambda should have type `Func<string, string,bool>`.
+
+It should output the if the two strings are anagrams .
+
+      Eg. 1:
+
+         Input:
+            string1 = "abc"
+            string2 = "bac"
+         Output: true
+
+      Eg. 2:
+
+         Input:
+            string1 = "aabc"
+            string2 = "bbac"
+         Output: false
+
+#!csharp
+
+ValidAnagram = (str1,str2) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+ValidAnagram = (str1,str2) =>
+{   
+    if(str1.Length != str2.Length) return false;
+        var dict = new Dictionary<char, int>();
+        foreach(var i in str1)
+            dict[i] = dict.ContainsKey(i) ? (dict[i] + 1) : 1;
+        foreach(var i in str2)
+            if(dict.ContainsKey(i)){
+                dict[i] -= 1;
+                if(dict[i] < 0) return false;
+            }
+        else
+            return false;        
+        
+        return dict.All(d => d.Value == 0);  
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Group Anagrams
+
+#!csharp
+
+Func<string[],List<List<string>>> GroupAnagrams = words => new List<List<string>>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Group Anagrams", context =>
+{
+    var correctAns = new List<List<string>>{new List<string>{"yo","oy"},new List<string>{"flop","olfp"},new List<string>{"act","tac","cat"},new List<string>{"foo"}};
+    var words = new string[]{"yo","act","flop","tac","foo","cat","oy","olfp"};
+
+    
+    var ans = GroupAnagrams(words);
+    bool flag = true;
+    foreach(List<string> arr in ans){
+        if(!correctAns.Any(a => a.All(arr.Contains) && a.Count()==arr.Count()))
+        {
+            flag = false;
+        }
+    }
+    if(correctAns.Count != ans.Count)flag = false;
+    if (flag) 
+    {
+        context.Pass("Correct groupings");
+    }
+    else
+    {
+        context.Fail("Incorrect groupings", 
+        "Try rearraning every input string such that each string's letters are ordered in alphabetical order. Any two resultant strings that are equal to each other, their original strings(with their letters in normal order) must be anagrams. Think how you can Bucket strings using this idea!!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 18 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 18 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 18: Group Anagrams
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to group anagrams.
+
+Given an array of strings strs, group the anagrams together. You can return the answer in any order. 
+Note :  `An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once`.
+
+The type you will be working with is/are `string[]`. It represents the string array that is given to you.
+
+Your will write your answer as a lambda and assign it to `GroupAnagrams`. The lambda should have type `Func<string[],List<List<string>>>`.
+
+It should output grouping of anagrams together.
+
+      Eg. 1:
+
+         Input: 
+         words = ["eat","tea","tan","ate","nat","bat"]
+         Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+      Eg. 2:
+
+         Input:
+         words: ["zxc", "asd", "weq", "sda", "qwe", "xcz"]
+         Output:[["asd", "sda"],["qwe", "weq"],["xcz", "zxc"]]
+
+#!csharp
+
+GroupAnagrams = words =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+GroupAnagrams = words =>
+{   
+     Dictionary<string,List<string>> anagrams = new Dictionary<string,List<string>>();
+     foreach(string word in words){
+         char[] charArray = word.ToCharArray();
+         Array.Sort(charArray);
+         string sortedWord = new String(charArray);
+
+         if(anagrams.ContainsKey(sortedWord)){
+             anagrams[sortedWord].Add(word);
+         }
+         else {
+             anagrams[sortedWord] = new List<string>(){word};
+         }
+     }
+     return anagrams.Values.ToList();
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Pattern Matcher
+
+#!csharp
+
+Func<string,string,bool> PatternMatcher = (str1,str2) => false;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Pattern Matcher", context =>
+{
+    var correctAns = true;
+    var str1 = "cat cat dog cat cat dog";
+    var str2 = "aabaab";
+    var ans = PatternMatcher(str1,str2);
+    if (correctAns == ans) 
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Incorrect Answer", 
+        "Think about using Hashmaps, space separate the given first string into multiple strings, then interate between them and the other given string, keep storing the mapping as you iterate through them, if you encounter conflicting mapping, then pattern will not be matching in such cases.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 19 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 19 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 19: Pattern Matcher
+
+#!markdown
+
+In this challenge, you will be writing an algorithm to check if the two strings follow same pattern.
+
+Given two strings, you have to check if the two strings follow similar pattern or not.
+
+The type you will be working with is/are `string`. It represents both the strings that are given to you.
+
+Your will write your answer as a lambda and assign it to `PatternMatcher`. The lambda should have type `Func<string,string,bool>`.
+
+It should output whether two strings follow the same pattern or not.
+
+      Eg. 1:
+
+         Input: 
+         str1 = "cat cat dog dog cat"
+         str2 = "aabba"
+         Output: true
+         Explanation: In first string, if we replace `cat` by `a`, and `dog` by `b`, the string1 converges to string2.
+
+      Eg. 2:
+
+         Input:
+         str1 = "cat cat dog bull"
+         str2 = "aaba
+         Output:false
+
+#!csharp
+
+PatternMatcher = (str1,str2) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+PatternMatcher = (str1,str2) =>
+{    string[] words = str1.Split(" ");
+     int len1 = words.Length;
+     int len2 = str2.Length;
+     if(len1!=len2)return false;
+     Dictionary<string,char> hashMap = new Dictionary<string,char>();
+     for(int i = 0;i<len1;i++){
+         if(hashMap.ContainsKey(words[i]) && hashMap[words[i]]!=str2[i])return false;
+         else hashMap[words[i]] = str2[i];
+     }
+     return true;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Knuth Morris Pratt (KMP) 
+
+#!csharp
+
+Func<string,string,List<int>> KMP = (str1,str2) => new List<int>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Pattern Matcher", context =>
+{
+    var correctAns = new List<int>{0,6,9,15};
+    var str1 = "CATDOGCATCATDOGCAT";
+    var str2 = "CAT";
+    var ans = KMP(str1,str2);
+    if (correctAns.Count() == ans.Count() && correctAns.All(ans.Contains)) 
+    {
+        context.Pass("Correct Answer");
+    }
+    else
+    {
+        context.Fail("Incorrect Answer", 
+        "Think about using Hashmaps, space separate the given first string into multiple strings, then interate between them and the other given string, keep storing the mapping as you iterate through them, if you encounter conflicting mapping, then pattern will not be matching in such cases.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 20 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 20 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 20: KMP Algorithm for Pattern Searching
+
+#!markdown
+
+In this challenge, you will be writing an KMP algorithm for pattern searching.
+
+Given a text txt[0..n-1] and a pattern pat[0..m-1], write a function search(char pat[], char txt[]) that prints all occurrences of pat[] in txt[]. You may assume that n > m.
+
+`Working of KMP:(CREDITS: GFG)`
+
+Preprocessing Overview:
+
+KMP algorithm preprocesses pat[] and constructs an auxiliary lps[] of size m (same as size of pattern) which is used to skip characters while matching.
+The name lps indicates longest proper prefix which is also suffix.
+`A proper prefix is prefix with whole string not allowed`. For example, prefixes of `“ABC”` are `“”, “A”, “AB” and “ABC”`. `Proper prefixes are “”, “A” and “AB”`. Suffixes of the string are `“”, “C”, “BC” and “ABC”`.
+We search for lps in sub-patterns. More clearly we focus on sub-strings of patterns that are either prefix and suffix.
+For each sub-pattern pat[0..i] where i = 0 to m-1, lps[i] stores length of the maximum matching proper prefix which is also a suffix of the sub-pattern pat[0..i].
+   lps[i] = the longest proper prefix of pat[0..i] 
+              which is also a suffix of pat[0..i]. 
+Note : `lps[i] could also be defined as longest prefix which is also proper suffix. We need to use properly at one place to make sure that the whole substring is not considered`.
+
+Examples of lps[] construction:
+For the pattern “AAAA”, 
+lps[] is [0, 1, 2, 3]
+
+For the pattern “ABCDE”, 
+lps[] is [0, 0, 0, 0, 0]
+
+For the pattern “AABAACAABAA”, 
+lps[] is [0, 1, 0, 1, 2, 0, 1, 2, 3, 4, 5]
+
+For the pattern “AAACAAAAAC”, 
+lps[] is [0, 1, 2, 0, 1, 2, 3, 3, 3, 4] 
+
+For the pattern “AAABAAA”, 
+lps[] is [0, 1, 2, 0, 1, 2, 3]
+
+
+Searching Algorithm:
+
+Unlike Naive algorithm, where we slide the pattern by one and compare all characters at each shift, `we use a value from lps[] to decide the next characters to be matched. The idea is to not match a character that we know will anyway match.`
+
+How to use lps[] to decide next positions (or to know a number of characters to be skipped)?
+
+`We start comparison of pat[j] with j = 0 with characters of current window of text.`
+`We keep matching characters txt[i] and pat[j] and keep incrementing i and j while pat[j] and txt[i] keep matching.`
+`When we see a mismatch,We know that characters pat[0..j-1] match with txt[i-j…i-1] (Note that j starts with 0 and increment it only when there is a match).`
+`We also know (from above definition) that lps[j-1] is count of characters of pat[0…j-1] that are both proper prefix and suffix.`
+`From above two points, we can conclude that we do not need to match these lps[j-1] characters with txt[i-j…i-1] because we know that these characters will anyway match.`
+
+Working Example to understand this: 
+
+txt[] = "AAAAABAAABA" 
+pat[] = "AAAA"
+lps[] = {0, 1, 2, 3} 
+
+i = 0, j = 0
+txt[] = "AAAAABAAABA" 
+pat[] = "AAAA"
+txt[i] and pat[j] match, do i++, j++
+
+i = 1, j = 1
+txt[] = "AAAAABAAABA" 
+pat[] = "AAAA"
+txt[i] and pat[j] match, do i++, j++
+
+i = 2, j = 2
+txt[] = "AAAAABAAABA" 
+pat[] = "AAAA"
+pat[i] and pat[j] match, do i++, j++
+
+i = 3, j = 3
+txt[] = "AAAAABAAABA" 
+pat[] = "AAAA"
+txt[i] and pat[j] match, do i++, j++
+
+i = 4, j = 4
+Since j == M, print pattern found and reset j,
+j = lps[j-1] = lps[3] = 3
+
+`Here unlike Naive algorithm, we do not match first three characters of this window. Value of lps[j-1] (in above step) gave us index of next character to match.`
+i = 4, j = 3
+txt[] = "AAAAABAAABA" 
+pat[] =  "AAAA"
+txt[i] and pat[j] match, do i++, j++
+
+i = 5, j = 4
+Since j == M, print pattern found and reset j,
+j = lps[j-1] = lps[3] = 3
+
+`Again unlike Naive algorithm, we do not match first three characters of this window. Value of lps[j-1] (in above step) gave us index of next character to match.`
+i = 5, j = 3
+txt[] = "AAAAABAAABA" 
+pat[] =   "AAAA"
+txt[i] and pat[j] do NOT match and j > 0, change only j
+j = lps[j-1] = lps[2] = 2
+
+i = 5, j = 2
+txt[] = "AAAAABAAABA" 
+pat[] =    "AAAA"
+txt[i] and pat[j] do NOT match and j > 0, change only j
+j = lps[j-1] = lps[1] = 1 
+
+i = 5, j = 1
+txt[] = "AAAAABAAABA" 
+pat[] =     "AAAA"
+txt[i] and pat[j] do NOT match and j > 0, change only j
+j = lps[j-1] = lps[0] = 0
+
+i = 5, j = 0
+txt[] = "AAAAABAAABA" 
+pat[] =      "AAAA"
+txt[i] and pat[j] do NOT match and j is 0, we do i++.
+
+i = 6, j = 0
+txt[] = "AAAAABAAABA" 
+pat[] =       "AAAA"
+txt[i] and pat[j] match, do i++ and j++
+
+i = 7, j = 1
+txt[] = "AAAAABAAABA" 
+pat[] =       "AAAA"
+txt[i] and pat[j] match, do i++ and j++
+
+`We continue this way...`
+
+The type you will be working with is/are `string`. It represents both the strings that are given to you.
+
+Your will write your answer as a lambda and assign it to `KMP`. The lambda should have type `Func<string,string,List<int>>`.
+
+It should output whether two strings follow the same pattern or not.
+
+      Eg. 1:
+
+         Input: 
+         txt = "AABAACAADAABAABA"
+         str2 = "AABA"
+         Output: [0,9,12]
+
+      Eg. 2:
+
+         Input: 
+         txt = "catcatdogdogcatdog"
+         str2 = "dog"
+         Output: [6,9,15]
+
+#!csharp
+
+KMP = (str1,str2) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+  void computeLPSArray(string pat, int M, int[] lps)
+    {
+        int len = 0;
+        int i = 1;
+        lps[0] = 0; 
+
+        while (i < M) {
+            if (pat[i] == pat[len]) {
+                len++;
+                lps[i] = len;
+                i++;
+            }
+            else 
+            {
+                if (len != 0) {
+                    len = lps[len - 1];
+                }
+                else 
+                {
+                    lps[i] = len;
+                    i++;
+                }
+            }
+        }
+    }
+
+KMP = (txt,pat) =>
+{   
+    int M = pat.Length;
+    int N = txt.Length;
+
+    int[] lps = new int[M];
+    List<int> matchedIndex = new List<int>();
+    int j = 0; 
+
+    computeLPSArray(pat, M, lps);
+
+    int i = 0; 
+    while (i < N) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == M) {
+            matchedIndex.Add(i-j);
+            j = lps[j - 1];
+        }
+
+        else if (i < N && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+    return matchedIndex;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();

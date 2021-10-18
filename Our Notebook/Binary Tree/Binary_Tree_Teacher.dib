@@ -1,0 +1,1506 @@
+#!csharp
+
+#r "nuget: Interactive.Journey"
+#r "nuget: Interactive.Extension.ImageSharp, *-*"
+
+#!csharp
+
+using Microsoft.DotNet.Interactive.Journey;
+using Microsoft.DotNet.Interactive;
+using Microsoft.DotNet.Interactive.Commands;
+using Microsoft.DotNet.Interactive.CSharp;
+using Microsoft.DotNet.Interactive.Events;
+using SixLabors.ImageSharp;
+using System.IO;
+
+#!csharp
+
+public class TreeNode{
+    public int data;
+    public TreeNode left;
+    public TreeNode right;
+    public TreeNode(int data, TreeNode left, TreeNode right){
+        this.data = data;
+        this.left = left;
+        this.right = right;
+    }
+}
+
+#!markdown
+
+# [Challenge]Preorder
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> Preorder = root => Enumerable.Empty<int>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Pre-Order traversal of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {1, 2, 4, 5, 3, 6, 7};
+
+    var ans = Preorder(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Preorder Traversal correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Remember preorder traversal ==> Preorder = (Root, left, right)");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 1 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 1 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 1 : Preorder Traversal of a Binary Tree 
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for traversing the nodes of a binary tree in preorder fashion. 
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `Preorder`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the list of values for each node in the tree in preorder.
+
+(Note : Recursive as well Iterative both solutions are accepted).
+
+#!csharp
+
+Preorder = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Preorder = root => 
+{
+    var ans = new List<int>();
+    if (root is null)
+    {
+        return ans;
+    }
+    ans.Add(root.data);
+    ans.AddRange(Preorder(root.left));
+    ans.AddRange(Preorder(root.right));
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge]Inorder
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> Inorder = root => Enumerable.Empty<int>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking In-Order traversal of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {4, 2, 5, 1, 6, 3, 7};
+
+    var ans = Inorder(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Inorder Traversal correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Remember inorder traversal ==> Preorder = (left, Root, right)");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 2 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 2 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 2 : Inorder Traversal of a Binary Tree 
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for traversing the nodes of a binary tree in inorder fashion. 
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `Inorder`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the list of values for each node in the tree in inorder.
+
+(Note : Recursive as well Iterative both solutions are accepted).
+
+#!csharp
+
+Inorder = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Inorder = root => 
+{
+    var ans = new List<int>();
+    if (root is null)
+    {
+        return ans;
+    }
+   
+    ans.AddRange(Inorder(root.left));
+    ans.Add(root.data);
+    ans.AddRange(Inorder(root.right));
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge]Postorder
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> Postorder = root => Enumerable.Empty<int>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Post-Order traversal of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {4, 5, 2, 6, 7, 3, 1};
+
+    var ans = Postorder(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Postrder Traversal correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Remember Postrder traversal ==> Preorder = (left, right, Root)");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 3 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 3 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 3 : Postorder Traversal of a Binary Tree 
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for traversing the nodes of a binary tree in postorder fashion. 
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `Postorder`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the list of values for each node in the tree in postorder.
+
+(Note : Recursive as well Iterative both solutions are accepted).
+
+#!csharp
+
+Postorder = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Postorder = root => 
+{
+    var ans = new List<int>();
+    if (root is null)
+    {
+        return ans;
+    }
+   
+    ans.AddRange(Postorder(root.left));
+    ans.AddRange(Postorder(root.right));
+    ans.Add(root.data);
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Level Order
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> LevelOrder = root => Enumerable.Empty<int>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Level-Order traversal of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {1, 2, 3, 4, 5, 6, 7};
+
+    var ans = LevelOrder(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("LevelOrder Traversal correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Use queue data structure");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 4 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 4 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 4 : Level Order Traversal of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for traversing the nodes of a binary tree in Levelorder fashion. 
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `LevelOrder`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the list of values for each node in the tree in Level order.
+
+             1        --> Level 1
+           /   \      
+          2     3     --> Level 2
+         / \   / \
+        4   5  6  7   --> Level 3
+
+#!csharp
+
+LevelOrder = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+LevelOrder = root => 
+{
+    var q = new Queue<TreeNode>();
+    var ans = new List<int>();
+    q.Enqueue(root);
+
+    while (q.Count > 0)
+    {
+        var curr = q.Dequeue();
+        if (curr is null)
+        {
+            continue;
+        }
+        ans.Add(curr.data);
+        q.Enqueue(curr.left);
+        q.Enqueue(curr.right);
+    }
+
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Size of Binary Tree
+
+#!csharp
+
+Func<TreeNode, int> Size = root => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking size of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = 7;
+
+    var ans = Size(sample);
+    
+    if (correctans ==  ans)
+    {
+        context.Pass("Size of binary tree is correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Try to use recursion");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 5 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 5 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 5 : Size of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for calculating the size of a binary tree. 
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `Size`. The lambda should have type `Func<TreeNode, int>`.
+
+It should output the size of binary tree which is total number of nodes present in binary tree.
+
+             1        --> Level 1
+           /   \      
+          2     3     --> Level 2
+         / \   / \
+        4   5  6  7   --> Level 3
+        Output : 7
+
+#!csharp
+
+Size = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## Scratchpad
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Size = root => 
+{
+    if(root is null){
+        return 0;
+    }
+    int x = Size(root.left);
+    int y = Size(root.right);
+
+    return x + y + 1;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Height of Binary Tree
+
+#!csharp
+
+Func<TreeNode, int> Height = root => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking height of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = 3;
+
+    var ans = Height(sample);
+    
+    if (correctans ==  ans)
+    {
+        context.Pass("Height of binary tree is correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Try to use recursion!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 6 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 6 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 6 : Height of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for calculating the Height of a binary tree. 
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `Height`. The lambda should have type `Func<TreeNode, int>`.
+
+It should output the height of binary tree.
+
+             1        --> Level 1
+           /   \      
+          2     3     --> Level 2
+         / \   / \
+        4   5  6  7   --> Level 3
+
+        Height of empty tree is 0
+        
+        Height of above tree  : 3
+
+#!csharp
+
+Height = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## Scratchpad
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Height = root => 
+{
+    if(root is null){
+        return 0;
+    }
+    
+    int x = Height(root.left);
+    int y = Height(root.right);
+
+    return Math.Max(x,y) + 1;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Diameter of Binary Tree
+
+#!csharp
+
+Func<TreeNode, int> Diameter = root => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Diameter of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / \
+    //    4   5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = 4;
+
+    var ans = Diameter(sample);
+    
+    if (correctans ==  ans)
+    {
+        context.Pass("Diameter of binary tree is correct");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 7 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 7 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 7 : Diameter of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for calculating the Diameter of a binary tree. 
+
+The diameter of a tree (sometimes called the width) is the number of nodes on the longest path between two end nodes. This path may or may not pass through the root.
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `Diameter`. The lambda should have type `Func<TreeNode, int>`.
+
+It should output the height of binary tree.
+
+             1          
+           /   \      
+          2     3     
+         / \   / \
+        4   5  6  7   
+
+        
+        Diameter of above tree  : 4
+
+#!csharp
+
+Diameter = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## Scratchpad
+
+#!csharp
+
+#!model-answer
+// this should pass
+int diameter = 0;
+int helper(TreeNode root){
+    if(root == null){
+        return -1;
+    }
+
+    int x = helper(root.left);
+    int y = helper(root.right);
+
+    diameter = Math.Max(diameter, x+y+2);
+
+    return Math.Max(x, y) + 1;
+}
+
+Diameter = root => 
+{
+    helper(root);
+    return diameter;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Left View of Binary Tree
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> LeftView = root => Enumerable.Empty<int>(); 
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Left View of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //       \   / \
+    //        5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, null, new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {1, 2, 5};
+
+    var ans = LeftView(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Correct left view");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Try to use queue data structure");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 8 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 8 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 8 : Left View of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for printing left view of binary tree.
+
+Left view of a Binary Tree is set of nodes visible when tree is visited from left side.
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `LeftView`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the left view of Binary Tree.
+
+Eg 1.
+
+               1        
+            /     \      
+          2        3     
+         / \      / \           
+        4   5    6   7  
+       /     \  /     \
+      8      9  10    11
+        
+      Left View of above tree  : [1,2,4,8]
+             1        
+            /          
+          2          
+         / 
+        4    
+       /   
+      8    
+
+Eg 2.
+
+               1        
+             /   \      
+            2      3     
+            \     / \           
+             5   6   7  
+                /     \
+                10    11
+        
+      Left View of above tree  : [1,2,5,10]
+
+#!csharp
+
+LeftView = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+LeftView = root => 
+{
+    var q = new Queue<TreeNode>();
+    var ans = new List<int>();
+    q.Enqueue(root);
+    // ans.Add(root.data);
+
+    while (q.Count > 0)
+    {
+        int size = q.Count;
+        ans.Add(q.Peek().data);
+        
+        while(size-- > 0){
+            TreeNode temp = q.Dequeue();
+
+            if(! (temp.left is null)){
+                q.Enqueue(temp.left);
+            }
+
+            if(!(temp.right is null)){
+                q.Enqueue(temp.right);
+            }
+        }
+    }
+
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Right View of Binary Tree
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> RightView = root => Enumerable.Empty<int>(); 
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Right view of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //     / \   / 
+    //    4   5  6  
+
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, null, null), new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), null);
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {1, 3, 6};
+
+    var ans = RightView(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Correct right view");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Use queue data structure");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 9 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 9 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 9 : Right View of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for printing right view of binary tree.
+
+Right view of a Binary Tree is set of nodes visible when tree is visited from right side.
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `RightView`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the right view of Binary Tree.
+
+Eg 1.
+
+               1        
+            /     \      
+          2        3     
+         / \      / \           
+        4   5    6   7  
+       /     \  /     \
+      8      9  10    11
+        
+      Right View of above tree  : [1,3,7,11]
+
+Eg 2.
+
+               1        
+            /     \      
+          2        3     
+         / \      /            
+        4   5    6     
+       /     \       
+      8      9      
+        
+      Right View of above tree  : [1,3,6,9]
+
+#!csharp
+
+RightView = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+RightView = root => 
+{
+    var q = new Queue<TreeNode>();
+    var ans = new List<int>();
+    q.Enqueue(root);
+    // ans.Add(root.data);
+
+    while (q.Count > 0)
+    {
+        int size = q.Count;
+        TreeNode x = null;
+        // for(int i = 0;i < size;i++){
+        //     x = q.Dequeue();
+        //     q.Enqueue(x);
+        // }
+
+        IEnumerator<TreeNode> enumerator = q.GetEnumerator();
+
+        while (enumerator.MoveNext()) {
+           x = (enumerator.Current);
+        }
+
+        ans.Add(x.data);
+        
+        while(size-- > 0){
+            TreeNode temp = q.Dequeue();
+
+            if(! (temp.left is null)){
+                q.Enqueue(temp.left);
+            }
+
+            if(!(temp.right is null)){
+                q.Enqueue(temp.right);
+            }
+        }
+    }
+
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Top View of Binary Tree
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> TopView = root => Enumerable.Empty<int>(); 
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Top View of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //       \   / \
+    //        5  6  7
+
+
+    var LeftSubTree = new TreeNode(2, null, new TreeNode(5, null, null));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {2, 1, 3, 7};
+
+    var ans = TopView(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Correct top view");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Use queue and try to maintain verticle levels");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 10 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 10 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 10 : Top View of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for printing top view of binary tree.
+
+Top view of a Binary Tree is set of nodes visible when tree is visited from top.
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `TopView`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the top view of Binary Tree.
+
+Note : Return nodes from leftmost node to rightmost node. 
+
+Eg 1.
+
+               1        
+            /     \      
+          2        3     
+         / \      / \           
+        4   5    6   7  
+       /     \  /     \
+      8      9  10    11
+        
+      Top View of above tree  : [8, 4, 2, 1, 3, 7, 11]
+ 
+
+Eg 2.
+
+               1        
+             /   \      
+            2      3     
+            \     / \           
+             5   6   7  
+                /     \
+                10    11
+        
+      Top View of above tree  : [2, 1, 3, 7, 11]
+
+#!csharp
+
+TopView = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!csharp
+
+#!model-answer
+// this should pass
+public class Pair{
+    public TreeNode node;
+    public int level;
+    public Pair(TreeNode node, int level){
+        this.node = node;
+        this.level = level;
+    }
+}
+
+TopView = root => 
+{
+    var q = new Queue<Pair>();
+
+    var ans = new List<int>();
+
+    q.Enqueue(new Pair(root, 0));
+
+    Dictionary<int, int> map = new Dictionary<int, int>();
+
+    int min = 0;
+    int max = 0;
+
+    while (q.Count > 0)
+    {
+        int size = q.Count;
+        
+        while(size-- > 0){
+            Pair p = q.Dequeue();
+
+            int level = p.level;
+            
+            TreeNode temp = p.node;
+
+            if(!map.ContainsKey(level)){
+                map.Add(level,temp.data);
+            }
+
+            min = Math.Min(min, level);
+            max = Math.Max(max, level);
+
+            if(! (temp.left is null)){
+                q.Enqueue(new Pair(temp.left, level-1));
+            }
+
+            if(!(temp.right is null)){
+                q.Enqueue(new Pair(temp.right, level+1));
+            }
+        }
+    }
+
+    for(int i = min; i <= max;i++){
+        ans.Add(map[i]);
+    }
+
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Bottom View of Binary Tree
+
+#!csharp
+
+Func<TreeNode, IEnumerable<int>> BottomView = root => Enumerable.Empty<int>(); 
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking Bottom View of binary Tree", context =>
+{   
+    // constructing Sample binary Tree
+    //         1
+    //       /   \
+    //      2     3
+    //       \   / \
+    //        5  6  7
+
+
+    // var LeftSubTree = new TreeNode(2, null, new TreeNode(5, null, null));
+    // var RightSubTree = new TreeNode(3, new TreeNode(6, null, null), new TreeNode(7, null, null));
+    // var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+
+   //          1        
+   //       /     \      
+   //      2        3     
+   //     / \      / \           
+   //    4   5    6   7  
+   //   /     \  /     \
+   //   8      9  10    11
+
+   // Bottom View of above tree  : [8, 4, 10, 6, 9, 7, 11]
+
+    var LeftSubTree = new TreeNode(2, new TreeNode(4, new TreeNode(8, null, null), null), new TreeNode(5, null, new TreeNode(9, null, null)));
+    var RightSubTree = new TreeNode(3, new TreeNode(6, new TreeNode(10, null, null), null), new TreeNode(7, null, new TreeNode(11, null, null)));
+    var sample = new TreeNode(1, LeftSubTree, RightSubTree);
+
+    var correctans = new int[] {8, 4, 10, 6, 9, 7, 11};
+
+    var ans = BottomView(sample);
+    
+    if (correctans.SequenceEqual(ans))
+    {
+        context.Pass("Correct bottom view");
+    }
+    else
+    {
+        context.Fail("Incorrect answer","Use queue and try to maintain verticle levels");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 11 completed! Proceed to next Challenge.");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 11 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 11 : Bottom View of a Binary Tree
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for printing bottom view of binary tree.
+
+Bottom view of a Binary Tree is set of nodes visible when tree is visited from bottom.
+
+The type you will be working with is `TreeNode`. It represents the root node of the binary tree rooted at that node. It has an integer property `data` representing the node's value. It also has the properties `left` and `right` that represents the left and right subtrees.
+
+Your will write your answer as a lambda and assign it to `BottomView`. The lambda should have type `Func<TreeNode, IEnumerable<int>>`.
+
+It should output the bottom view of Binary Tree.
+
+Note : Return nodes from leftmost node to rightmost node. 
+If there are multiple bottom-most nodes for a horizontal distance from root, then print the later one in level traversal.
+
+Eg 1.
+
+               1        
+            /     \      
+          2        3     
+         / \      / \           
+        4   5    6   7  
+       /     \  /     \
+      8      9  10    11
+        
+      Bottom View of above tree  : [8, 4, 10, 6, 9, 7, 11]
+ 
+
+Eg 2.
+
+               1        
+             /   \      
+            2      3     
+            \     / \           
+             5   6   7  
+                /     \
+                10    11
+        
+      Bottom View of above tree  : [10, 6, 3, 7, 11]
+
+#!csharp
+
+BottomView = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!csharp
+
+#!model-answer
+// this should pass
+public class Pair{
+    public TreeNode node;
+    public int level;
+    public Pair(TreeNode node, int level){
+        this.node = node;
+        this.level = level;
+    }
+}
+
+BottomView = root => 
+{
+    var q = new Queue<Pair>();
+
+    var ans = new List<int>();
+
+    q.Enqueue(new Pair(root, 0));
+
+    Dictionary<int, int> map = new Dictionary<int, int>();
+
+    int min = 0;
+    int max = 0;
+
+    while (q.Count > 0)
+    {
+        int size = q.Count;
+        
+        while(size-- > 0){
+            Pair p = q.Dequeue();
+
+            int level = p.level;
+            
+            TreeNode temp = p.node;
+
+            map[level]= temp.data;
+
+            min = Math.Min(min, level);
+            max = Math.Max(max, level);
+
+            if(! (temp.left is null)){
+                q.Enqueue(new Pair(temp.left, level-1));
+            }
+
+            if(!(temp.right is null)){
+                q.Enqueue(new Pair(temp.right, level+1));
+            }
+        }
+    }
+
+    for(int i = min; i <= max;i++){
+        ans.Add(map[i]);
+    }
+
+    return ans;
+    
+};
+
+#!csharp
+
+Lesson.ResetChallenge();

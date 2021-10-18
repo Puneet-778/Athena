@@ -1,0 +1,1392 @@
+#!csharp
+
+#r "nuget: Interactive.Journey"
+#r "nuget: Interactive.Extension.ImageSharp"
+
+#!csharp
+
+using Microsoft.DotNet.Interactive.Journey;
+using Microsoft.DotNet.Interactive;
+using Microsoft.DotNet.Interactive.Commands;
+using Microsoft.DotNet.Interactive.CSharp;
+using Microsoft.DotNet.Interactive.Events;
+using SixLabors.ImageSharp;
+using System.IO;
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Dynamic Programming
+
+#!csharp
+
+Func<int, int> Fibonacci = n => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Fibonacci Number", context =>
+{
+    var correctAns = 8;
+    var ans = Fibonacci(7);
+
+    if (correctAns == ans)
+    {
+        context.Pass("Correct nth Fibonacci");
+    }
+    else
+    {
+        context.Fail("Incorrect nth Fibonacci", 
+        "Remember, a fibonacci term is sum of its two previous terms.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 1 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 1 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 1: Find the nth Fibonacci
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the nth Fibonacci number in the Fibonacci Series.
+
+A Fibonacci series is a series of numbers in which each number (Fibonacci number) is the sum of the two preceding numbers. The simplest is the series 0, 1, 1, 2, 3, 5, 8, etc.
+
+The type you will be working with is `int`. It represents the nth Fibonacci term in the fibonacci series.
+
+Your will write your answer as a lambda and assign it to `Fibonacci`. The lambda should have type `Func<int , int>`.
+
+It should output the nth Fibonacci number.
+
+Eg 1.
+
+      5
+        
+      Fibonacci term  : 3
+
+Eg 2.
+
+      7
+        
+      Fibonacci term : 8
+
+#!csharp
+
+Fibonacci = number =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Fibonacci = number => 
+{   if(number==1)return 0;
+    if(number==2)return 1;
+    var dp = new int[number];
+    dp[0] = 0;
+    dp[1] = 1;
+    for(int i = 2; i < number; i++)
+        dp[i] = dp[i-1]+dp[i-2];
+    return dp[number-1];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Tribonacci Number
+
+#!csharp
+
+Func<int, int> Tribonacci = number => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Tribonacci number", context =>
+{
+    var correctAns = 7;
+    
+    var ans = Tribonacci(6);
+    if (correctAns == ans)
+    {
+        context.Pass("Correct nth Tribonacci");
+    }
+    else
+    {
+        context.Fail("Incorrect Tribonacci ",
+        "Remember, Tribonacci number is the sum of previous 3 tribonacci number");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 2 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 2 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 2: Tribonacci Number
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the nth Tribonacci number in the Tribonacci Series.
+
+A Tribonacci series is a series of numbers in which each number (Tribonacci number) is the sum of the two preceding numbers. The simplest is the series 0, 1, 1, 2, 4, 7, 13, etc.
+
+The type you will be working with is `int`. It represents the nth Tribonacci term in the Tribonacci series.
+
+Your will write your answer as a lambda and assign it to `Tribonacci`. The lambda should have type `Func<int , int>`.
+
+It should output the nth Tribonacci number.
+
+Eg 1.
+
+      5
+        
+      Tribonacci term  : 4
+
+Eg 2.
+
+      7
+        
+      Tribonacci term : 13
+
+#!csharp
+
+Tribonacci = number =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Tribonacci = number => 
+{   if(number==1)return 0;
+    if(number==2 || number==3)return 1;
+    var dp = new int[number];
+    dp[0] = 0;
+    dp[1] = 1;
+    dp[2] = 1;
+    for(int i = 3; i < number; i++)
+        dp[i] = dp[i-1]+dp[i-2]+dp[i-3];
+    return dp[number-1];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Maximum Subarray Sum
+
+#!csharp
+
+Func<int[], int> MaxSubarraySum = inputArray => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for maximum sum subarray", context =>
+{
+    var correctAns = 18;
+    
+    var ans = MaxSubarraySum(new int[]{-1,3,-44,2,-1,6,11});
+    if (correctAns == ans)
+    {
+        context.Pass("Correct Max Subarray Sum");
+    }
+    else
+    {
+        context.Fail("Incorrect Max Subarray Sum",
+        "Beware of negative numbers!!");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 3 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 3 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 3: Maximum Subarray Sum
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Maximum subarray sum.
+
+A subarray is a contiguous part of array. You have to find the maximum subarray sum in the given array.
+
+The type you will be working with is `int[]`. It denotes the array that is given to you.
+
+Your will write your answer as a lambda and assign it to `MaxSubarraySum`. The lambda should have type `Func<int[] , int>`.
+
+It should output the Maximum subarray sum.
+
+Eg 1.
+
+      inputArray: [-2, -3, 4, -1, -2, 1, 5, -3]
+        
+      Maximum Subarray Sum  : 7
+
+Eg 2.
+
+      inputArray: [-2, -5, 6, -1, -3, 1, 5, -6] 
+        
+      Maximum Subarray Sum  : 8
+
+#!csharp
+
+MaxSubarraySum = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MaxSubarraySum = inputArray => 
+{   
+    var dp = new int[inputArray.Count()];
+    dp[0] = inputArray[0];
+    int maxi = Int32.MinValue;
+    for(int i = 1; i < inputArray.Count(); i++){
+        dp[i] = Math.Max(inputArray[i],dp[i-1]+inputArray[i]);
+        maxi = Math.Max(maxi,dp[i]);
+    }
+    return maxi;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Fibonacci Application
+
+#!csharp
+
+Func<int[], int> MinCost = inputArray => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for minimum cost to reach the top floor", context =>
+{
+    var correctAns = 6;
+    
+    var ans = MinCost(new int[]{1,100,1,1,1,100,1,1,100,1});
+    if (correctAns == ans)
+    {
+        context.Pass("Correct Minimum cost");
+    }
+    else
+    {
+        context.Fail("Incorrect Minimum cost",
+        "Use Dynamic programming!!, chose the best from the previous two states.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 4 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 4 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 4: Minimum cost climbing stairs
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Minimum cost climbing stairs.
+
+You are given an integer array cost where cost[i] is the cost of ith step on a staircase. Once you pay the cost, you can either climb one or two steps.
+
+You can either start from the step with index 0, or the step with index 1.
+
+The type you will be working with is `int[]`. It denotes the cost array that is given to you.
+
+Your will write your answer as a lambda and assign it to `MinCost`. The lambda should have type `Func<int[] , int>`.
+
+It should output the Minimum cost of climbing stairs.
+
+Eg 1.
+
+      inputArray: [10,15,20]
+        
+      Minimum cost  : 15
+
+Eg 2.
+
+      inputArray: [1,100,1,1,1,100,1,1,100,1] 
+        
+      Maximum Subarray Sum  : 6
+
+#!csharp
+
+MinCost = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MinCost = cost => 
+{   
+        var dp = new int[cost.Count()];
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for(int i = 2;i<cost.Count();i++)
+          dp[i] = Math.Min(dp[i-1],dp[i-2])+cost[i];
+        return Math.Min(dp[dp.Count()-1],dp[dp.Count()-2]);
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Fibonacci Generalised
+
+#!csharp
+
+Func<int,int, int> FiboGenKSteps = (topFloor,maxSteps) => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for total ways to reach top floor with K steps", context =>
+{
+    var correctAns = 5;
+    var topFloor = 5;
+    var maxSteps = 3;
+    var ans = FiboGenKSteps(topFloor,maxSteps);
+    if (correctAns == ans)
+    {
+        context.Pass("Correct total ways.");
+    }
+    else
+    {
+        context.Fail("Incorrect total ways.",
+        "Try Dynamic Programming, try to use the concept of Fibonacci numbers and generalise it");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 5 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 5 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 5: Number of ways to reach top floor with K steps
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Total ways to climb topmost stair with atmost k jumps.
+
+Given N number of stairs. Also given the number of steps that one can cover at most in one leap (K). The task is to find the number of possible ways one (only consider Combinations) can climb to the top of the building in K leaps or less from the ground floor.
+
+The type you will be working with is/are `int`. It denotes the number of stairs and maximum steps that you can take in single jump.
+
+Your will write your answer as a lambda and assign it to `FiboGenKSteps`. The lambda should have type `Func<int, int , int>`.
+
+It should output the Number of ways of reaching the top floor.
+
+Eg 1.
+
+      N = 5, k = 3
+        
+      Total ways  : 7
+      
+      Explanation: 
+
+      Possible ways are: 1 1 1 1 1 
+                         1 1 1 2
+                         2 2 1
+                         3 2
+                         3 1 1
+
+#!csharp
+
+FiboGenKSteps = (inputArray,maxSteps) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+FiboGenKSteps = (number,maxSteps) => 
+{   
+    int[] dp;
+    dp = new int[number+1];
+    dp[0] = 1;
+    for (int i = 1; i <= maxSteps; i++)
+    {
+        for (int j = 0; j <= number; j++)
+        {
+            if (j >= i)
+            {
+                dp[j] += dp[j - i];
+            }
+        }
+    }
+    return dp[number];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Minimum Cost generalised
+
+#!csharp
+
+Func<int[],int,int> MinCostKSteps = (inputArray,maxSteps) => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for minimum cost to reach the top floor with atmost K steps", context =>
+{
+    var correctAns = 14;
+    var maxSteps = 2;
+    var cost = new int[]{0,3,5,6,7,1,5,4,3,0};
+    var ans = MinCostKSteps(cost,maxSteps);
+    if (correctAns == ans)
+    {
+        context.Pass("Correct Minimum Cost");
+    }
+    else
+    {
+        context.Fail("Incorrect Minimum Cost",
+        "Try Dynamic Programming, you can think of combining the concepts used in K steps climbing stairs and Minimum cost question");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 6 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 6 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 6: Minimum cost climbing stairs with atmost K steps.
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Minimum cost to climb topmost stair with atmost k jumps.
+
+Given that one will start from the 0-the step, the task is to find the minimum cost to reach the top of the floor(N+1) by climbing N stairs with atmost K steps at a time. 
+
+The type you will be working with is/are `int[] and int`. It denotes the cost of each step and maximum step that you can take.
+
+Your will write your answer as a lambda and assign it to `MinCostKSteps`. The lambda should have type `Func<int[], int , int>`.
+
+It should output the Minimum cost of reaching the top floor.
+
+Eg 1.
+
+      cost = [0,3,5,6,7,1,5,4,3,0]
+      maxSteps = 2
+
+      Minimum cost: 14
+      
+
+#!csharp
+
+MinCostKSteps = (cost,maxSteps) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MinCostKSteps = (cost,maxSteps) => 
+{   
+        var dp = new int[cost.Count()];
+        // foreach(var x in cost)Console.WriteLine(x);
+        dp[0] = cost[0];
+        for(int i = 1;i<cost.Count();i++){
+            dp[i] = Int32.MaxValue;
+            for(int j = 1;j<=maxSteps;j++){
+                if(i-j >=0)
+                    dp[i] = Math.Min(dp[i],dp[i-j]+cost[i]);
+            }
+        }
+        // foreach(var x in dp)Console.WriteLine(x);
+        Console.WriteLine(dp[dp.Count()-1]);
+        return dp[dp.Count()-1];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Print Min Cost Path taken to reach the topmost floor
+
+#!csharp
+
+Func<int[],int,IEnumerable<int>> MinCostPath = (inputArray,maxSteps) => new int[inputArray.Count()];
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for minimum cost Path to reach the top floor with atmost K steps", context =>
+{
+    var correctAns = new int[]{0,1,3,5,7,9};
+    var maxSteps = 2;
+    var cost = new int[]{0,3,5,6,7,1,5,4,3,0};
+    var ans = MinCostPath(cost,maxSteps);
+    if (correctAns.Count() == ans.Count() && correctAns.All(ans.Contains))
+    {
+        context.Pass("Correct Minimum Cost Path");
+    }
+    else
+    {
+        context.Fail("Incorrect Minimum Cost Path",
+        "Use Dynamic Programming, think in the same way as last question, and for every index, keep storing the best index that you can come from");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 7 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 7 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 7: Print minimum cost path taken to reach the topmost stair
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Minimum cost path taken to climb topmost stair with atmost k jumps.
+
+Given that one will start from the 0-the step, the task is to find the minimum cost path(indices of the element) take to reach the top of the floor(N+1) by climbing N stairs with atmost K steps at a time. 
+
+The type you will be working with is/are `int[] and int`. It denotes the cost of each step and maximum step that you can take.
+
+Your will write your answer as a lambda and assign it to `MinCostPath`. The lambda should have type `Func<int[], int , int[]>`.
+
+It should output the Minimum cost of reaching the top floor.
+
+Eg 1.
+
+      cost = [0,3,5,6,7,1,5,4,3,0]
+      maxSteps = 2
+
+      Minimum cost path: [0,1,3,5,7,9]
+      
+
+#!csharp
+
+MinCostPath = (cost,maxSteps) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MinCostPath = (cost,maxSteps) => 
+{   
+        var dp = new int[cost.Count()];
+        var pathIndexes = new int[cost.Count()];
+        List<int> path = new List<int>();
+        // foreach(var x in cost)Console.WriteLine(x);
+        dp[0] = cost[0];
+        pathIndexes[0] = -1;
+        for(int i = 1;i<cost.Count();i++){
+            dp[i] = Int32.MaxValue;
+            for(int j = 1;j<=maxSteps;j++){
+                if(i-j >=0)
+                    if(dp[i-j]+cost[i] < dp[i]){
+                        dp[i] = Math.Min(dp[i],dp[i-j]+cost[i]); 
+                        pathIndexes[i] = i-j;
+                    }  
+            }
+        }
+        var loc = cost.Count()-1;
+        while(loc!=-1){
+            path.Add(loc);
+            loc = pathIndexes[loc];
+        }
+        path.Reverse();
+        // foreach(var x in path)Console.WriteLine(x);
+        return path;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Minimum Coin Change
+
+#!csharp
+
+Func<int[],int,int> MinCoinChange = (coins,amount) => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for fewest number of coins to make total amount", context =>
+{
+    var correctAns = 3;
+    var amount = 11;
+    var coins = new int[]{1,2,5};
+    var ans = MinCoinChange(coins,amount);
+    if (ans == correctAns)
+    {
+        context.Pass("Correct Minimum number coins.");
+    }
+    else
+    {
+        context.Fail("Incorrect Minimum number coins.",
+        "Think of Dynamic programming, try building an array of minimum number of coins needed to make change for all amounts between 0 and n inclusive. Note that no coins are needed to ake change for 0: in order to make change for 0, you do not need to use any coins.");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 8 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 8 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 8: Minimum number of coins required to make total amount.
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Minimum number of coins required to make the total amount.
+
+Given a value amount, if we want to make change for `amount` cents, and we have infinite supply of each of C = { C1, C2, .. , Cm} valued coins, what is the minimum number of coins to make the change? If it’s not possible to make change, print -1.
+
+The type you will be working with is/are `int[] and int`. It denotes the different types of coins and total amount that you have to make.
+
+Your will write your answer as a lambda and assign it to `MinCoinChange`. The lambda should have type `Func<int[], int , int[]>`.
+
+It should output the Minimum number of coins.
+
+Eg 1.
+
+      coins[] = [25,10,5]
+      amount = 30
+
+      Minimum number of coins: 2
+
+Eg 2.
+
+      coins[] = [9, 6, 5, 1]
+      amount = 11
+
+      Minimum number of coins: 2
+      
+
+#!csharp
+
+MinCoinChange = (coins,amount) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MinCoinChange = (coins,amount) => 
+{   
+    var dp = new int[amount+1];
+        int n = coins.Count();
+        dp[0]=0;
+        for(int i=1;i<amount+1;i++){
+            dp[i] = Int32.MaxValue;
+            foreach(int x in coins){
+               if(x<=i){
+                   dp[i] = Math.Min(dp[i],1+dp[i-x]);
+               }
+        
+            }
+        }
+        if(dp[amount]==Int32.MaxValue)return -1;
+        return dp[amount];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] 2D Dynamic Programming ==> 0/1 Knapsack
+
+#!csharp
+
+Func<int[],int[],int,int> Knapsack = (weight,cost,capacity) => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for maximum profit", context =>
+{
+    var correctAns = 220;
+    var capacity = 50;
+    var weight = new int[]{10,20,30};
+    var cost = new int[]{60,100,120};
+    var ans = Knapsack(weight,cost,capacity);
+    if (ans == correctAns)
+    {
+        context.Pass("Correct Maximum Profit");
+    }
+    else
+    {
+        context.Fail("Incorrect Maximum Profit",
+        "Think of using 2D Dynamic Programming with maximum capacity as one dimension and weight/cost array size as another");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 9 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 9 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 9: 0/1 Knapsack Problem
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the maximum total value in the knapsack.
+
+Given weights and values of n items, put these items in a knapsack of capacity W to get the maximum total value in the knapsack. In other words, given two integer arrays val[0..n-1] and wt[0..n-1] which represent values and weights associated with n items respectively. Also given an integer W which represents knapsack capacity, find out the maximum value subset of val[] such that sum of the weights of this subset is smaller than or equal to W. `You cannot break an item, either pick the complete item or don’t pick it (0-1 property)`.
+
+The type you will be working with is/are `int[] and int`. It denotes the weight and value arrays and the maximum capacity of the knapsack.
+
+Your will write your answer as a lambda and assign it to `Knapsack`. The lambda should have type `Func<int[], int[] , int , int>`.
+
+It should output the maximum total value in the knapsack.
+
+Eg 1.
+
+      value[] = [60,100,120]
+      weight[] = [10,20,30]
+      W = 50
+      
+      maximum total value: 220
+      
+
+#!csharp
+
+Knapsack = (weight,cost,capacity) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Knapsack = (weight,cost,capacity) => 
+{   
+    var n = weight.Count();
+    var dp = new int[n+1,capacity+1]; 
+    for(int i = 0; i <= n; i++)
+    {
+        for(int w = 0; w <= capacity; w++)
+        {
+            if (i == 0 || w == 0)
+                dp[i,w] = 0;
+            else if (weight[i - 1] <= w)
+                dp[i,w] = Math.Max(cost[i - 1] + dp[i - 1,w - weight[i - 1]], dp[i - 1,w]);
+            else
+                dp[i,w] = dp[i - 1,w];
+        }
+    }
+    return dp[n,capacity];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Total Number of coin changes
+
+#!csharp
+
+Func<int[],int,int> TotalCoinChange = (coins,amount) => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Total number of coin change", context =>
+{
+    var correctAns = 4;
+    var amount = 5;
+    var coins = new int[]{1,2,5};
+    var ans = TotalCoinChange(coins,amount);
+    if (ans == correctAns)
+    {
+        context.Pass("Correct Total number of ways to change coin.");
+    }
+    else
+    {
+        context.Fail("Incorrect Total number of ways to change coin.",
+        "Think of using 2D Dynamic Programming with maximum capacity as one dimension and weight/cost as another");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 10 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 10 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 10: Total Number of Coin change
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Total number of coin change ways.
+
+Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = { S1, S2, .. , Sm} valued coins, how many ways can we make the change? The order of coins doesn’t matter.
+
+The type you will be working with is/are `int[] and int`. It denotes the different types of coin and total amount to be made.
+
+Your will write your answer as a lambda and assign it to `TotalCoinChange`. The lambda should have type `Func<int[] , int , int>`.
+
+It should output the Total number of coin change ways.
+
+Eg 1.
+
+      coins[] = [1,2,3]
+      amount = 4
+      
+      Total ways to make change: 4
+      Explanation: {1,1,1,1},{1,1,2},{2,2},{1,3}
+
+Eg 2.
+
+      coins[] = [2,5,3,6]
+      amount = 10
+      
+      Total ways to make change: 5
+      Explanation: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}
+      
+
+#!csharp
+
+TotalCoinChange = (coins,amount) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+TotalCoinChange = (coins,amount) => 
+{   
+    int fin_amount = amount;
+    int nc = coins.Count();
+    var arr = new int[nc+1,fin_amount+1];
+    for(int i=0;i<nc+1;i++)
+    {
+        arr[i,0]=1;
+    }
+    for(int i=1;i<nc+1;i++)
+    {
+        for(int j=1;j<fin_amount+1;j++)
+        {
+
+            int x;
+            if((j-coins[i-1])<0)
+                x=0;
+            else
+                x=arr[i,j-coins[i-1]]; 
+                arr[i,j]=arr[i-1,j]+x; 
+        }
+    }
+        return arr[nc,fin_amount];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Longest Common Subsequence
+
+#!csharp
+
+Func<string,string,int> LCS = (text1,text2) => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Longest common subsequence", context =>
+{
+    var correctAns = 3;
+    var text1 = "abcde";
+    var text2 = "ace";
+    var ans = LCS(text1,text2);
+    if (ans == correctAns)
+    {
+        context.Pass("Correct LCS length.");
+    }
+    else
+    {
+        context.Fail("Incorrect LCS length.",
+        "Try building a 2D array of the longest common subsequences of substrings pair of the input strings. Let the rows of the array represent substrings of the second input string str2. Let the first row represent the empty string. Let each row i thereafter represent the substring of str2 from 0 to i, with i excluded. Let the columns similarly represnt the first input string str1");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 11 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 11 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 11: Longest Common Subsequence
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Longest common subsequence of two strings.
+
+Given two strings `text1` and `text2`, return the length of their `longest common subsequence`. If there is no common subsequence, return 0.
+
+A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+
+For example, `"ace" is a subsequence of "abcde"`.
+A common subsequence of two strings is a subsequence that is common to both strings.
+
+The type you will be working with is/are `string`. It denotes both the given strings.
+
+Your will write your answer as a lambda and assign it to `LCS`. The lambda should have type `Func<string,string,int>`.
+
+It should output the Longest common subsequence of the given two strings.
+
+Eg 1.
+
+      Input: text1 = "abcde", text2 = "ace" 
+      Output: 3  
+      Explanation: The longest common subsequence is "ace" and its length is 3.
+
+Eg 2.
+
+      Input: text1 = "abc", text2 = "abc"
+      Output: 3
+      Explanation: The longest common subsequence is "abc" and its length is 3.
+      
+
+#!csharp
+
+LCS = (coins,amount) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+LCS = (text1,text2) => 
+{   
+    int n = text1.Count();
+    int m = text2.Count();
+    var dp = new int[n+1,m+1];
+    for(int i = 0;i < n+1;i++){
+        for(int j = 0;j< m+1 ; j++){
+            if(i == 0 || j==0)dp[i,j] = 0;
+            else if(text1[i-1] == text2[j-1]){
+                dp[i,j] = dp[i-1,j-1]+1;
+            }
+            else{
+                dp[i,j] = Math.Max(dp[i,j-1],dp[i-1,j]);
+            }
+        }
+    }
+    return dp[n,m];
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Longest Increasing Subsequence
+
+#!csharp
+
+Func<int[],int> LIS = inputArray => 0;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking for Longest common subsequence", context =>
+{
+    var correctAns = 4;
+    var inputArray = new int[]{10,9,2,5,3,7,101,18};
+    var ans = LIS(inputArray);
+    if (ans == correctAns)
+    {
+        context.Pass("Correct LIS length.");
+    }
+    else
+    {
+        context.Fail("Incorrect LIS length.",
+        "Use Dynamic Programming");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+{
+    var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+    var total = context.RuleEvaluations.Count();
+    
+    if (total == numPassed)
+    {
+        context.SetMessage("Challenge 12 completed!");
+        await context.StartNextChallengeAsync();
+    }
+    else
+    {
+        context.SetMessage("Challenge 12 not complete");
+    }
+});
+
+#!markdown
+
+# [Question]
+
+#!markdown
+
+# Challenge 12: Longest Increasing Subsequence
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for Finding the Longest Increasing subsequence.
+
+Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, `[3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7]`.
+
+The type you will be working with is/are `int[]`. It denotes the given array.
+
+Your will write your answer as a lambda and assign it to `LIS`. The lambda should have type `Func<string,string,int>`.
+
+It should output the length of the Longest Increasing subsequence.
+
+Eg 1.
+
+      Input: nums = [10,9,2,5,3,7,101,18]
+      Output: 4
+      Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+
+Eg 2.
+
+      Input: nums = [0,1,0,3,2,3]
+      Output: 4
+      
+
+#!csharp
+
+LIS = inputArray =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+# [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+LIS = nums => 
+{   
+        var dp = new int[nums.Count()];
+        int n = nums.Count();
+        dp[0] = 1;
+        int maxi = 1;
+        for(int i=1;i<n;i++){
+            dp[i]=1;
+            for(int j = 0;j<i;j++){
+                if(nums[i]>nums[j]) dp[i]=Math.Max(dp[i],dp[j]+1);
+            }
+            maxi = Math.Max(maxi,dp[i]);
+        }
+        return maxi;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();

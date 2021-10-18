@@ -1,0 +1,902 @@
+#!csharp
+
+#r "nuget: Interactive.Journey"
+#r "nuget: Interactive.Extension.ImageSharp, *-*"
+
+#!csharp
+
+using Microsoft.DotNet.Interactive.Journey;
+using Microsoft.DotNet.Interactive;
+using Microsoft.DotNet.Interactive.Commands;
+using Microsoft.DotNet.Interactive.CSharp;
+using Microsoft.DotNet.Interactive.Events;
+using SixLabors.ImageSharp;
+using System.IO;
+
+#!csharp
+
+class ListNode
+{
+    public int value;
+    public ListNode next;
+
+    public ListNode(int value, ListNode next)
+    {
+        this.value = value;
+        this.next = next;
+    }
+}
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Linked List
+
+#!csharp
+
+Func<ListNode, IEnumerable<int>> Traverse = root => Enumerable.Empty<int>();
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking traversal", context =>
+{    
+    var correctans = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+
+    ListNode sample = new ListNode(correctans[0], null);
+
+    ListNode temp = sample;
+
+    for(int i = 1; i < correctans.Length; i++){
+        temp.next = new ListNode(correctans[i], null);
+        temp = temp.next;
+    }
+
+    var ans = Traverse(sample);
+    
+    if (ans.All(correctans.Contains) && correctans.Count() == ans.Count())
+    {
+        context.Pass("Traversal correct");
+    }
+    else
+    {
+        context.Fail("Traversal incorrect");
+    }
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 1 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 1 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 1 : Traverse a LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for traversing the nodes of a Linked List. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `Traverse`. The lambda should have type `Func<ListNode, IEnumerable<int>>`.
+
+It should output the list of values for each node in the Linked list.
+
+#!csharp
+
+Traverse = root =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Traverse = root => 
+{
+    var ans = new List<int>();
+    ListNode temp = root;
+    while(temp != null){
+        ans.Add(temp.value);
+        temp = temp.next;
+    }
+    return ans;
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] add Node at last
+
+#!csharp
+
+Func<ListNode, int, ListNode> AddLast = (root, data) => null;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking if node is added correctly at the end", context =>
+{    
+
+    var sampleInput = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+
+    var correctans = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10, 11};
+    
+    int x = 11;
+
+
+    // creating root of LinkedList
+    ListNode sample = new ListNode(sampleInput[0], null);
+
+    // temporary head node
+    ListNode temp = sample;
+
+    //creating LinkedList
+    for(int i = 1; i < sampleInput.Length; i++){
+        temp.next = new ListNode(sampleInput[i], null);
+        temp = temp.next;
+    }
+
+    //Getting root after performing addLast 
+    ListNode root = AddLast(sample, x);
+
+    //checking for ans
+    var ans = Traverse(root);
+    
+    if (ans.All(correctans.Contains) && correctans.Count() == ans.Count())
+    {
+        context.Pass("Node added successfully");
+    }
+    else
+    {
+        context.Fail("Node add failed !");
+    }
+
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 2 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 2 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 2: Add a node at end of LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for adding a node at the end of LinkedList. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `AddLast`. The lambda should have type `Func<ListNode, int, ListNode>`.
+
+It should return head of LinkedList after adding given node at the end of LinkedList.
+
+Eg.
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+
+    int x = 11;
+
+    output =  1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
+    
+    
+
+#!csharp
+
+AddLast = (root, val) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+AddLast = (root, val) => 
+{
+    if(root == null){
+        root = new ListNode(val, null);
+        return root;
+    }
+
+    ListNode temp = root;
+
+    while(temp.next != null){
+        temp = temp.next;
+    }
+
+    temp.next = new ListNode(val, null);
+    
+    return root;
+
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Add node at start
+
+#!csharp
+
+Func<ListNode, int, ListNode> AddFirst = (root, data) => null;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Checking if node is added correctly at the beginning", context =>
+{    
+
+    var sampleInput = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+
+    var correctans = new int[] {11, 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+    
+    int x = 11;
+
+
+    // creating root of LinkedList
+    ListNode sample = new ListNode(sampleInput[0], null);
+
+    // temporary head node
+    ListNode temp = sample;
+
+    //creating LinkedList
+    for(int i = 1; i < sampleInput.Length; i++){
+        temp.next = new ListNode(sampleInput[i], null);
+        temp = temp.next;
+    }
+
+    //Getting root after performing addLast 
+    ListNode root = AddFirst(sample, x);
+
+    //checking for ans
+    var ans = Traverse(root);
+    
+    if (ans.All(correctans.Contains) && correctans.Count() == ans.Count())
+    {
+        context.Pass("Node added successfully");
+    }
+    else
+    {
+        context.Fail("Node add failed !");
+    }
+
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 3 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 3 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 3: Add a node at the beginning of LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for adding a node at the beginning of LinkedList. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next adjacent node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `AddFirst`. The lambda should have type `Func<ListNode, int, ListNode>`.
+
+It should return the head of LinkedList after adding given node at the beginning of LinkedList.
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+
+    int x = 11;
+
+    Output : 11 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+
+#!csharp
+
+AddFirst = (root, val) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+AddFirst = (root, val) => 
+{
+    if(root == null){
+        root = new ListNode(val, null);
+        return root;
+    }
+
+    ListNode temp = new ListNode(val,root);
+    
+    return temp;
+
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Reverse a LinkedList
+
+#!csharp
+
+Func<ListNode, ListNode> Reverse = root => null;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Reversing LinkedList", context =>
+{    
+
+    var sampleInput = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+
+    var correctans = new int[] {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    
+    // creating root of LinkedList
+    ListNode sample = new ListNode(sampleInput[0], null);
+
+    // temporary head node
+    ListNode temp = sample;
+
+    //creating LinkedList
+    for(int i = 1; i < sampleInput.Length; i++){
+        temp.next = new ListNode(sampleInput[i], null);
+        temp = temp.next;
+    }
+
+    //Getting root after reversing LinkedList 
+    ListNode root = Reverse(sample);
+
+    //checking for ans
+    var ans = Traverse(root);
+    
+    if (ans.All(correctans.Contains) && correctans.Count() == ans.Count() && correctans.SequenceEqual(ans))
+    {
+        context.Pass("LinkedList reversed successfully");
+    }
+    else
+    {
+        context.Fail("LinkedList reverse Fail !");
+    }
+
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 4 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 4 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 4: Reverse a LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for reversing LinkedList. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next adjacent node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `Reverse`. The lambda should have type `Func<ListNode, ListNode>`.
+
+It should return the head of LinkedList after reversing the LinkedList.
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+
+    Output : 10 -> 9 -> 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1
+
+#!csharp
+
+Reverse = (root) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+Reverse = (root) => 
+{
+    if(root == null){
+        return root;
+    }
+
+    ListNode prev = null;
+    ListNode temp = root;
+
+    while(temp != null){
+        ListNode next = temp.next;
+        temp.next = prev;
+        prev = temp;
+        temp = next;
+    }
+    
+    return prev;
+
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Middle Point of LinkedList
+
+#!csharp
+
+Func<ListNode, ListNode> MidPoint = root => null;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Finding mid-point of LinkedList", context =>
+{    
+
+    var sampleInput = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+    
+    int mididx = sampleInput.Length / 2;
+
+    int correctans = sampleInput[mididx];
+    
+    // creating root of LinkedList
+    ListNode sample = new ListNode(sampleInput[0], null);
+
+    // temporary head node
+    ListNode temp = sample;
+
+    //creating LinkedList
+    for(int i = 1; i < sampleInput.Length; i++){
+        temp.next = new ListNode(sampleInput[i], null);
+        temp = temp.next;
+    }
+
+    //Getting midpoint 
+    ListNode midNode = MidPoint(sample);
+    
+    if (midNode.value == correctans)
+    {
+        context.Pass("Midpoint found successfully");
+    }
+    else
+    {
+        context.Fail("Wrong Answer !");
+    }
+
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 5 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 5 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 5 : Find middle point of LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for finding middle point of LinkedList. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next adjacent node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `MidPoint`. The lambda should have type `Func<ListNode, ListNode>`.
+
+It should return the address of node which is present at the mid-point of  LinkedList.
+
+Note : If there are two middle nodes, return the second middle node.
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 
+    
+    mid-point of above linkedlist : 5
+
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+    
+    mid-point of above linkedlist : 6
+
+#!csharp
+
+MidPoint = (root) =>
+{
+    throw new NotImplementedException(); // write your answer here
+};
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+MidPoint = (root) => 
+{
+    if(root == null){
+        return root;
+    }
+
+    ListNode slow = root;
+    ListNode fast = root;
+
+    while(fast != null && fast.next != null){
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+
+    return slow;
+
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Kth node from end of LinkedList
+
+#!csharp
+
+Func<ListNode, int, ListNode> KnodeFromEnd = (root, k) => null;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Finding K-th node from end of LinkeList", context =>
+{    
+
+    var sampleInput = new int[] { 1, 2, 3, 4, 5, 6 , 7, 8, 9, 10};
+    
+    int n = sampleInput.Length;
+
+    int k = 3;
+
+    int correctans = sampleInput[n-k];
+    
+    // creating root of LinkedList
+    ListNode sample = new ListNode(sampleInput[0], null);
+
+    // temporary head node
+    ListNode temp = sample;
+
+    //creating LinkedList
+    for(int i = 1; i < sampleInput.Length; i++){
+        temp.next = new ListNode(sampleInput[i], null);
+        temp = temp.next;
+    }
+
+    //Getting k-th node 
+    ListNode knode = KnodeFromEnd(sample, k);
+    
+    if (knode.value == correctans)
+    {
+        context.Pass("K-th node found successfully");
+    }
+    else
+    {
+        context.Fail("Wrong Answer !");
+    }
+
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 6 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 6 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 6 : Find K-th Node from end of LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for finding K-th node from end of LinkedList. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next adjacent node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `KnodeFromEnd`. The lambda should have type `Func<ListNode, int, ListNode>`.
+
+It should return the address of node which is k-th node from end of LinkedList.
+
+Note : 
+
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 
+
+    k = 2
+     
+    k-th node from end of linkedlist : 8
+
+#!markdown
+
+## [Scratchpad]
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+KnodeFromEnd = (root, k) => 
+{
+    ListNode slow = root;
+    ListNode fast = root;
+
+    k -= 1;
+
+    while(k-- > 0){
+        fast = fast.next;
+    }
+
+    if(fast.next == null){
+        return root;
+    }
+
+    while(fast.next != null){
+        slow = slow.next;
+        fast = fast.next;
+    }
+
+    return slow;
+
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
+
+#!markdown
+
+# [Challenge] Delete n-th node from linkedlist
+
+#!csharp
+
+Func<ListNode, int, ListNode> DeleteNode = (root, n) => null;
+
+#!csharp
+
+Lesson.CurrentChallenge.AddRule("Delete n-th node from LinkedList", context =>
+{    
+
+    var sampleInput = new int[] {1, 2, 3, 4, 5, 6 ,7, 8, 9, 10};
+
+    int n = 6;
+
+    var correctans = new int[] {1, 2, 3, 4, 5, 7, 8, 9, 10};
+    
+    // creating root of LinkedList
+    ListNode sample = new ListNode(sampleInput[0], null);
+
+    // temporary head node
+    ListNode temp = sample;
+
+    //creating LinkedList
+    for(int i = 1; i < sampleInput.Length; i++){
+        temp.next = new ListNode(sampleInput[i], null);
+        temp = temp.next;
+    }
+
+    //Getting root after reversing LinkedList 
+    ListNode root = KnodeFromEnd(sample, n);
+
+    //checking for ans
+    var ans = Traverse(root);
+    
+    if (ans.All(correctans.Contains) && correctans.Count() == ans.Count())
+    {
+        context.Pass("Node deleted Successfully");
+    }
+    else
+    {
+        context.Fail("Wrong Node deleted!");
+    }
+
+});
+
+#!csharp
+
+Lesson.CurrentChallenge.OnCodeSubmitted(async context =>
+    {
+        var numPassed = context.RuleEvaluations.Count(e => e.Passed);
+        var total = context.RuleEvaluations.Count();
+        // var history = context.SubmissionHistory ....
+        if (total == numPassed)
+        {
+            context.SetMessage("Challenge 7 completed!");
+            await context.StartNextChallengeAsync();
+        }
+        else
+        {
+            context.SetMessage("Challenge 7 not complete");
+        }
+    });
+
+#!markdown
+
+## [Question]
+
+#!markdown
+
+# Challenge 7 : Delete N-th node from LinkedList
+
+#!markdown
+
+In this challenge, you will be writing an algorithm for deleting N-th node from LinkedList. 
+
+The type you will be working with is `ListNode`. It represents the node of the Linked List. It has an integer property `value` representing the node's value. It also has the property `next` that represents the next adjacent node in the Linked list.
+
+Your will write your answer as a lambda and assign it to `DeleteNode`. The lambda should have type `Func<ListNode, int, ListNode>`.
+
+It should return the address of root node after deleting N-th node.
+
+Note : 
+
+    Input : 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 
+        
+    N = 3
+    
+    Output : 1 -> 2 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 
+
+#!csharp
+
+#!model-answer
+// this should pass
+
+KnodeFromEnd = (root, n) => 
+{
+    if( n == 1){
+        ListNode ansNode = root.next;
+        root.next = null;
+        return ansNode;
+    }
+
+
+    ListNode temp = root;
+    ListNode prev = null;
+
+    n -= 1;
+
+    while(n-- > 0){
+        prev = temp;
+        temp = temp.next;
+    }
+
+    prev.next = temp.next;
+    temp.next = null;
+
+    return root;
+
+};
+
+#!csharp
+
+Lesson.ResetChallenge();
